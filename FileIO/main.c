@@ -42,6 +42,7 @@ void FileTest3() {
 void FileTest4() {
     freopen("in.txt", "r", stdin);
     freopen("out3.txt", "w", stdout);
+
     scanf("%d", &n);
     printf("freopen으로 재 설정 후 출력 : %d\n", n);
     fclose(stdin);
