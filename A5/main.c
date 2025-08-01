@@ -20,9 +20,9 @@ int main()
 
     fscanf(inf, "%d", &focus);
 
-    for(int i = 0; i < size; i++){
+    for(int i = size - 1; i >= 0; i--){
         if(data[i] == focus){
-            find = i + 1;
+            find = i + 2;
             break;
         }
     }
