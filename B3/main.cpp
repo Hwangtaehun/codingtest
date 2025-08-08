@@ -3,32 +3,32 @@
 
 using namespace std;
 
-int m_size, cnt;
+int g_size, g_cnt;
 bool **g_check;
 
 void input(){
     freopen("input.txt", "r", stdin);
-    scanf("%d", &m_size);
+    scanf("%d", &g_size);
     fclose(stdin);
 }
 
 void output(){
     freopen("output.txt", "w", stdout);
-    printf("%d", cnt);
+    printf("%d", g_cnt);
     fclose(stdout);
 }
 
 void Init(int **data){
-    for (int i = 0; i < m_size; i++) {
-        for (int j = 0; j < m_size; j++) {
+    for (int i = 0; i < g_size; i++) {
+        for (int j = 0; j < g_size; j++) {
             data[i][j] = 0;
         }
     }
 }
 
 bool Check(int **data){
-    for(int i = 0; i < m_size; i++){
-        for(int j = 0; j < m_size; j++){
+    for(int i = 0; i < g_size; i++){
+        for(int j = 0; j < g_size; j++){
             if(data[i][j] == 0){
                 return false;
             }
@@ -38,8 +38,8 @@ bool Check(int **data){
 }
 
 void Print(int **data){
-    for (int i = 0; i < m_size; i++) {
-        for (int j = 0; j < m_size; j++) {
+    for (int i = 0; i < g_size; i++) {
+        for (int j = 0; j < g_size; j++) {
             printf("%d ", data[i][j]);
         }
         printf("\n");
@@ -47,7 +47,7 @@ void Print(int **data){
     printf("\n");
 }
 void Solve(int **data, int x, int y){
-    for(int i = 0; i < m_size; i++){
+    for(int i = 0; i < g_size; i++){
         int m_x = x + i;
         int m_y = y + i;
 
@@ -59,7 +59,7 @@ void Solve(int **data, int x, int y){
             data[i][y] = 2;
         }
 
-        if(m_x < m_size && m_y < m_size){
+        if(m_x < g_size && m_y < g_size){
             if(data[m_x][m_y] == 0){
                 data[m_x][m_y] = 2;
             }
@@ -68,8 +68,8 @@ void Solve(int **data, int x, int y){
     }
 
     if(!Check(data)){
-        for (int i = 0; i < m_size; i++) {
-            for (int j = 0; j < m_size; j++) {
+        for (int i = 0; i < g_size; i++) {
+            for (int j = 0; j < g_size; j++) {
                 if(data[i][j] == 0 && !g_check[i][j]){
                     data[i][j] = 1;
                     Solve(data, i, j);
@@ -80,15 +80,15 @@ void Solve(int **data, int x, int y){
     else{
         int m_chat = 0;
 
-        for(int i = 0; i < m_size; i++){
-            for(int j = 0; j < m_size; j++){
+        for(int i = 0; i < g_size; i++){
+            for(int j = 0; j < g_size; j++){
                 if(data[i][j] == 1)
                     m_chat++;
             }
         }
 
-        if(m_chat == m_size){
-            cnt++;
+        if(m_chat == g_size){
+            g_cnt++;
         }
         return;
     }
@@ -98,19 +98,19 @@ void Solve(int **data, int x, int y){
 int main()
 {
     input();
-    int **data = new int*[m_size];
-    g_check = new bool*[m_size];
-    cnt = 0;
+    int **data = new int*[g_size];
+    g_check = new bool*[g_size];
+    g_cnt = 0;
 
-    for(int i = 0; i < m_size; i++){
-        data[i] = new int[m_size]{0};
-        g_check[i] = new bool[m_size]{0};
+    for(int i = 0; i < g_size; i++){
+        data[i] = new int[g_size]{0};
+        g_check[i] = new bool[g_size]{0};
     }
 
     Init(data);
 
-    for(int i = 0; i < m_size; i++){
-        for(int j = 0; j < m_size; j++){
+    for(int i = 0; i < g_size; i++){
+        for(int j = 0; j < g_size; j++){
             data[i][j] = 1;
             g_check[i][j] = 1;
             Solve(data, i, j);
@@ -118,7 +118,7 @@ int main()
         }
     }
 
-    for (int i = 0; i < m_size; i++) {
+    for (int i = 0; i < g_size; i++) {
         delete[] data[i];
     }
 
