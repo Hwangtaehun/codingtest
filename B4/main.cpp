@@ -32,39 +32,43 @@ void Input(){
     fclose(stdin);
 }
 
+void Output(){
+    freopen("output.txt", "w", stdout);
+    printf("\n\n%d\n\n", g_cnt);
+    fclose(stdout);
+}
+
 bool isSafe(int col, int row){
     return (col >= 0 && col < g_col) && (row >= 0 && row < g_row);
 }
 
 void Bfs(int r, int c) {
-    int cnt = 0;
-    queue <VERTEX> q;
-    q.push((VERTEX){r, c});
+    queue<VERTEX> q;
+    q.push({r, c});
     g_visit[r][c] = true;
 
-    while(!q.empty()){
+    int dist = 0;
+    while (!q.empty()) {
         int m_size = q.size();
-        while(m_size--){
+        while (m_size--) {
             VERTEX node = q.front();
             q.pop();
 
-
-            if(g_data[node.x][node.y] == 'G'){
-                if(cnt < g_cnt){
-                    g_cnt = cnt;
-                }
-                break;
+            if (g_data[node.x][node.y] == 'G') {
+                g_cnt = dist;
+                return;
             }
 
-            for(int i = 0; i < 4; i++){
-                if(isSafe(node.x+g_dx[i], node.y+g_dy[i]) && g_data[node.x+g_dx[i]][node.y+g_dy[i]] != '#' && !g_visit[node.x+g_dx[i]][node.y+g_dy[i]]){
-                    printf("%d, %d\n", node.x+g_dx[i], node.y+g_dy[i]);
-                    g_visit[node.x+g_dx[i]][node.y+g_dy[i]] = true;
-                    q.push((VERTEX){node.x+g_dx[i], node.y+g_dy[i]});
+            for (int i = 0; i < 4; i++) {
+                int nr = node.x + g_dx[i];
+                int nc = node.y + g_dy[i];
+                if (isSafe(nr, nc) && g_data[nr][nc] != '#' && !g_visit[nr][nc]) {
+                    g_visit[nr][nc] = true;
+                    q.push({nr, nc});
                 }
             }
-            cnt++;
         }
+        dist++;
     }
 }
 
@@ -92,7 +96,7 @@ int main()
 {
     Input();
     Solve();
-    printf("cnt = %d\n", g_cnt);
+    Output();
 
     for(int i = 0; i < g_row; i++) {
         delete[] g_data[i];
