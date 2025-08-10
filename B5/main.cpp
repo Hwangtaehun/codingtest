@@ -13,8 +13,6 @@ int g_cnt;
 int **g_data;
 queue < VERTEX > q;
 
-using namespace std;
-
 bool isSafe(int row, int col){
     return (col >= 0 && col < g_col) && (row >= 0 && row < g_row);
 }
