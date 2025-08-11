@@ -31,7 +31,7 @@ void Print(){
 }
 
 void Input(){
-    freopen("input1.txt", "r", stdin);
+    freopen("input.txt", "r", stdin);
     scanf("%d %d %d", &g_row, &g_col, &g_box);
 
     g_data = new int**[g_box];
@@ -85,7 +85,7 @@ int mySolve(){
     while(!g_q.empty()){
         ROWCOL pos = g_q.front();
         g_q.pop();
-        Print();
+        //Print();
 
         for(int i = 0; i < 6; i++){
             int m_box = pos.box + g_dbox[i];
