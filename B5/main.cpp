@@ -8,7 +8,7 @@ struct VERTEX{
 };
 
 int g_dcol[4] = {1, 0, -1, 0}, g_drow[4] = {0, 1, 0, -1};
-int g_row, g_col; //ї­, За
+int g_row, g_col; //пїЅпїЅ, пїЅпїЅ
 int g_cnt;
 int **g_data;
 queue < VERTEX > q;
@@ -93,5 +93,11 @@ int main()
     Input();
     g_cnt = mySolve();
     Output();
+
+    for(int i = 0; i < g_row; i++) {
+        delete[] g_data[i];
+    }
+
+    delete[] g_data;
     return 0;
 }

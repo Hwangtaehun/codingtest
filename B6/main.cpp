@@ -111,5 +111,13 @@ int main()
     cnt = mySolve();
     Output(cnt);
 
+    for (int i = 0; i < g_box; i++) {
+        for (int j = 0; j < g_col; j++) {
+            delete[] g_data[i][j];
+        }
+        delete[] g_data[i];
+    }
+    delete[] g_data;
+
     return 0;
 }
