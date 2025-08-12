@@ -39,7 +39,7 @@ int main()
         for(int j = 0; j < SIZE; j++){
             if(big < data[i][j]){
                 big = data[i][j];
-                c = i, r = j;
+                c = i + 1, r = j + 1;
             }
         }
     }
