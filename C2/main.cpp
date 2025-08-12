@@ -27,7 +27,8 @@ void Input(){
 
 void Output(){
     freopen("output.txt", "w", stdout);
-    printf("%d", big);
+    printf("%d\n", big);
+    printf("%d %d", c, r);
     fclose(stdout);
 }
 
@@ -38,6 +39,7 @@ int main()
         for(int j = 0; j < SIZE; j++){
             if(big < data[i][j]){
                 big = data[i][j];
+                c = i, r = j;
             }
         }
     }
