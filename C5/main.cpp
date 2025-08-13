@@ -41,6 +41,26 @@ void mySolve(){
     }
 }
 
+void mySolve2(){
+    int m_tot, m_max = 0;
+    for(int i = 0; i <= g_N - g_W; i++){
+        for(int j = 0; j < g_M - g_H; j++){
+            m_tot = 0;
+            for(int k = 0; k < g_W; k++){
+                for(int l = 0; l < g_H; l++){
+                    m_tot += g_data[i+k][j+l];
+                }
+            }
+
+            if(m_max < m_tot){
+                m_max = m_tot;
+            }
+        }
+    }
+
+    printf("m_max = %d\n", m_max);
+}
+
 void Output(){
     freopen("output.txt", "w", stdout);
     printf("%d", g_Max);
@@ -51,6 +71,7 @@ int main()
 {
     Input();
     mySolve();
+    mySolve2();
     Output();
     return 0;
 }
