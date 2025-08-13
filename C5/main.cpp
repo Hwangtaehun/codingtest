@@ -73,5 +73,12 @@ int main()
     mySolve();
     mySolve2();
     Output();
+
+    for (int i = 0; i < g_N; i++) {
+        delete[] g_data[i];
+    }
+
+    delete[] g_data;
+
     return 0;
 }
