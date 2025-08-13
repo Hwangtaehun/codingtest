@@ -17,26 +17,48 @@ void Input(){
     fclose(stdin);
 }
 
-void Solve(){
+void mySolve(){
     for(int i = 0; i <= g_n - g_w; i++){
         int m_cost = 0;
 
-        for(int j = 0; j < 3; j++){
+        for(int j = 0; j < g_w; j++){
             m_cost += g_data[i + j];
         }
 
-        printf("m_cost = %d\n", m_cost);
+        //printf("m_cost = %d\n", m_cost);
         if(m_cost > g_cost){
             g_cost = m_cost;
         }
     }
 }
 
+void Solve(){
+    int tot, maxTot = 0;
+    for(int i = 0; i <= g_n - g_w; i++){
+        tot = 0;
+        for(int j = i;  j < i + g_w; j++){
+            tot += g_data[j];
+            //printf("%d ", j);
+        }
+        //printf("\n");
+        if( tot > maxTot)
+            maxTot = tot;
+    }
+    printf("%d\n", maxTot);
+}
+
+void Output(){
+    freopen("output.txt", "w", stdout);
+    printf("%d", g_cost);
+    fclose(stdout);
+}
+
 int main()
 {
     Input();
+    mySolve();
     Solve();
-    printf("g_cost = %d\n", g_cost);
+    Output();
     delete[] g_data;
     return 0;
 }

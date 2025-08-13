@@ -59,6 +59,36 @@ void mySolve(){
     }
 }
 
+int Solve(){
+    int cnt = 0;
+    for(int a = 1; a <= g_r; a++){
+        for(int b = a; b <= g_r; b++){
+            for(int c = b; c <= g_r; c++){
+                if(a+b+c == g_r && c < a + b){
+                    printf("%d %d %d\n", a, b, c);
+                    cnt++;
+                }
+            }
+        }
+    }
+    return cnt++;
+}
+
+int Solve2(){
+    int c, cnt = 0;
+    for(int a = 1; a <= g_r; a++){
+        for(int b = a; b <= g_r; b++){
+            c = g_r - (a + b);
+
+            if(c < a + b && ( b <= c )){
+                printf("%d %d %d\n", a, b, c);
+                cnt++;
+            }
+        }
+    }
+    return cnt++;
+}
+
 void Output(){
     freopen("output.txt", "w", stdout);
     printf("%d", g_cnt);
@@ -69,6 +99,8 @@ int main()
 {
     Input();
     mySolve();
+    printf("%d\n", Solve());
+    printf("%d\n", Solve2());
     Output();
     return 0;
 }
