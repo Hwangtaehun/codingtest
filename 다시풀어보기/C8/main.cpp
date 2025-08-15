@@ -10,48 +10,42 @@ void Input(){
     fclose(stdin);
 }
 
-void Search(int cur, int pri, int cnt){
-    int m_cur = cur + pri;
+void Output(){
+    freopen("Output.txt", "w", stdout);
+    printf("%d", g_cnt);
+    fclose(stdout);
+}
 
-    printf("m_cur = %d, cnt = %d\n", m_cur, cnt);
-
-    //요부분 추가 중요
+void Search(int cur, int cnt){
+    //이부분 풀이 참조
     if(cnt > g_cnt){
         return;
     }
+    //끝
 
-    if(m_cur == g_b){
+    if(cur == g_b){
         if(cnt < g_cnt){
             g_cnt = cnt;
         }
         return;
     }
 
-    if(m_cur < g_b){
-        Search(m_cur, 1, cnt + 1);
-        Search(m_cur, 5, cnt + 1);
-        Search(m_cur, 10, cnt + 1);
+    if(cur < g_b){
+        Search(cur + 1, cnt + 1);
+        Search(cur + 5, cnt + 1);
+        Search(cur + 10, cnt + 1);
     }
     else{
-        Search(m_cur, -1, cnt + 1);
-        Search(m_cur, -5, cnt + 1);
-        Search(m_cur, -10, cnt + 1);
+        Search(cur - 1, cnt + 1);
+        Search(cur - 5, cnt + 1);
+        Search(cur - 10, cnt + 1);
     }
 }
 
 int main()
 {
     Input();
-    if(g_a < g_b){
-        Search(g_a, 1, 1);
-        Search(g_a, 5, 1);
-        Search(g_a, 10, 1);
-    }
-    else{
-        Search(g_a, -1, 1);
-        Search(g_a, -5, 1);
-        Search(g_a, -10,1);
-    }
-    printf("g_cnt = %d\n", g_cnt);
+    Search(g_a, 0);
+    Output();
     return 0;
 }
