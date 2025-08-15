@@ -7,12 +7,13 @@ using namespace std;
 
 queue <int> g_data;
 int g_gari, g_cnt = 0;
-int n, cnt
+int n, cnt;
 
 void Input(){
     freopen("input.txt", "r", stdin);
     scanf("%d", &g_gari);
     fclose(stdin);
+    n = g_gari;
 }
 
 bool sosu(int num){
@@ -115,7 +116,6 @@ void Output(){
 int main()
 {
     Input();
-    n = g_gari;
     int start = clock();
     int m_max = pow(10, g_gari);
     int m_min = pow(10, g_gari - 1);
