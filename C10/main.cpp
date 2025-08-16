@@ -1,11 +1,15 @@
 #include <stdio.h>
-#include<string.h>
+#include <string.h>
 
 using namespace std;
 
 int g_size, g_sum = 0x7FFFFFFF;
 int **g_data;
 bool *g_visited;
+
+int m[11][11];
+int col_check[11];
+int n, min_sol = 0x7FFFFFFF;
 
 void Input(){
     freopen("input.txt", "r", stdin);
@@ -22,6 +26,12 @@ void Input(){
         for(int j = 0; j < g_size; j++){
             scanf("%d", &g_data[i][j]);
         }
+    }
+
+    n = g_size;
+
+    for(int i = 0; i < n; i++){
+        memcpy(m[i], g_data[i], n*sizeof(int));
     }
 
     fclose(stdin);
