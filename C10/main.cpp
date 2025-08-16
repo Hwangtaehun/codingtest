@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include<string.h>
 
 using namespace std;
 
@@ -42,12 +43,17 @@ void mySolve(int col, int sum){
     }
 }
 
+void Output(){
+    freopen("output.txt", "w", stdout);
+    printf("%d", g_sum);
+    fclose(stdout);
+}
+
 int main()
 {
     Input();
     mySolve(0, 0);
-    printf("%d\n", g_sum);
-
+    Output();
     for(int i = 0; i < g_size; i++){
         delete[] g_data[i];
     }
