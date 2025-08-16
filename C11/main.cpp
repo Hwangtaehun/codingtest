@@ -37,8 +37,8 @@ void Input(){
     n = g_size;
     M = g_sum;
 
-    memcpy(m, g_data[0], n*sizeof(int));
-    memcpy(c, g_data[1], n*sizeof(int));
+    memcpy(m + 1, g_data[0], n*sizeof(int));
+    memcpy(c + 1, g_data[1], n*sizeof(int));
 }
 
 void Print(){
@@ -57,12 +57,12 @@ void Print(){
 }
 
 void Print(int m[], int c[]){
-    for(int i = 0; i < n; i++){
+    for(int i = 1; i <= n; i++){
         printf("%d ", m[i]);
     }
     printf("\n");
 
-    for(int i = 0; i < n; i++){
+    for(int i = 1; i <= n; i++){
         printf("%d ", c[i]);
     }
     printf("\n");
@@ -100,7 +100,7 @@ int Min(int a, int b){
 int Solve(int i, int r){
     if(r <= 0)
         return 0;
-    printf("%d,%d \n", i, r);
+    //printf("%d,%d \n", i, r);
 
     if(i==0)
     {
