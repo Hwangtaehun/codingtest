@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <malloc.h>
 #define KIND 2
 
@@ -7,6 +8,9 @@ using namespace std;
 int g_size, g_sum, g_min = 0x7FFFFFFF;
 int **g_data;
 bool *g_use;
+
+//모범답안
+int M,n,i,m[101],c[101];
 
 void Input(){
     freopen("input.txt", "r", stdin);
@@ -29,6 +33,12 @@ void Input(){
     for(int i = 0; i < g_size; i++){
         g_use[i] = false;
     }
+
+    n = g_size;
+    M = g_sum;
+
+    memcpy(m, g_data[0], n*sizeof(int));
+    memcpy(c, g_data[1], n*sizeof(int));
 }
 
 void Print(){
@@ -44,6 +54,18 @@ void Print(){
         }
         printf("\n");
     }
+}
+
+void Print(int m[], int c[]){
+    for(int i = 0; i < n; i++){
+        printf("%d ", m[i]);
+    }
+    printf("\n");
+
+    for(int i = 0; i < n; i++){
+        printf("%d ", c[i]);
+    }
+    printf("\n");
 }
 
 void Output(){
@@ -71,10 +93,28 @@ void mySolve(int mem, int cost){
     }
 }
 
+int Min(int a, int b){
+    return a < b ? a : b;
+}
+
+int Solve(int i, int r){
+    if(r <= 0)
+        return 0;
+    printf("%d,%d \n", i, r);
+
+    if(i==0)
+    {
+        return 99999;
+    }else
+        return Min(Solve(i-1, r), Solve(i-1, r - m[i]) + c[i]);
+}
+
 int main()
 {
     Input();
+    Print(m, c);
     mySolve(0, 0);
+    printf("%d\n", Solve(n, M));
     Output();
     return 0;
 }
