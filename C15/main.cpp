@@ -3,6 +3,7 @@
 using namespace std;
 
 int g_sum, g_cnt = 0;
+int cnt = 0;
 
 void Input(){
     freopen("input.txt", "r", stdin);
@@ -23,6 +24,24 @@ void mySolve(int num, int sum){
     mySolve(2, sum + 2);
 }
 
+void Solve(int v){
+    if(v > g_sum){
+        printf("X");
+        return;
+    }
+
+    if(v == g_sum){
+        cnt++;
+        printf(" %d\n", v);
+        return;
+    }
+
+    printf(" %d", v);
+    Solve(v+1);
+    printf(" %d", v);
+    Solve(v+2);
+}
+
 void Output(){
     freopen("output.txt", "w", stdout);
     printf("%d", g_cnt);
@@ -33,6 +52,8 @@ int main()
 {
     Input();
     mySolve(0, 0);
+    Solve(0);
+    printf("\n%d\n", cnt);
     Output();
     return 0;
 }
