@@ -51,5 +51,6 @@ int main()
     Input();
     mySolve();
     Output();
+    delete [] g_data;
     return 0;
 }
