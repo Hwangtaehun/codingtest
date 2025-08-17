@@ -315,5 +315,6 @@ int main()
     Solve3();
     Solve();
     Output();
+    free(g_data);
     return 0;
 }
