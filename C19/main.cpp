@@ -6,7 +6,8 @@ using namespace std;
 int g_use[SIZE];
 int g_choo[SIZE] = {1, 3, 9, 27, 81, 243, 729};
 int g_total[SIZE + 1];
-int g_tcnt, g_weight;
+int g_cnt = 0, g_weight;
+bool g_end = false;
 
 void Input(){
     freopen("input.txt", "r", stdin);
@@ -14,26 +15,37 @@ void Input(){
     fclose(stdin);
 }
 
+bool Check(){
+    for(int i = 0; i < SIZE; i++){
+        if(!g_use[i])
+            return false;
+    }
+    return true;
+}
+
 void mySolve(int left, int right){
-    printf("%d <=> %d\n", right, left);
+    if(g_end || Check()){
+        return;
+    }
 
     if(left == right){
-        g_total[g_tcnt++] = g_weight;
+        g_total[g_cnt++] = g_weight;
 
         for(int i = 0; i < SIZE; i++){
             if(g_use[i] == -1){
-                g_total[g_tcnt++] = g_choo[i];
+                g_total[g_cnt++] = g_choo[i];
             }
         }
 
-        g_total[g_tcnt++] = 0;
+        g_total[g_cnt++] = 0;
 
         for(int i = 0; i < SIZE; i++){
             if(g_use[i] == 1){
-                g_total[g_tcnt++] = g_choo[i];
+                g_total[g_cnt++] = g_choo[i];
             }
         }
 
+        g_end = true;
         return;
     }
 
@@ -49,11 +61,11 @@ void mySolve(int left, int right){
 }
 
 void Output(){
-    //freopen("output.txt", "w", stdout);
-    for(int i = 0; i < g_tcnt; i++){
+    freopen("output.txt", "w", stdout);
+    for(int i = 0; i < g_cnt; i++){
         printf("%d ", g_total[i]);
     }
-    //fclose(stdout);
+    fclose(stdout);
 }
 
 int main()
