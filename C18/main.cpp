@@ -7,11 +7,16 @@ using namespace std;
 int g_n, g_w, g_max = 0, **g_data;
 bool *g_use;
 
+//Solve
+int W, n, w[102], v[102];
+
 void Input()
 {
     freopen("input.txt", "r", stdin);
 
     scanf("%d %d", &g_n, &g_w);
+    n = g_n;
+    W = g_w;
 
     g_data = (int **)malloc(g_n * sizeof(int *));
     g_use = (bool *)malloc(g_n * sizeof(bool *));
@@ -22,6 +27,8 @@ void Input()
 
     for(int i = 0; i < g_n; i++){
         scanf("%d %d", &g_data[i][0], &g_data[i][1]);
+        w[i+1] = g_data[i][0];
+        v[i+1] = g_data[i][1];
     }
 
     fclose(stdin);
@@ -81,10 +88,23 @@ void mySolve(int weight, int value){
     }
 }
 
+int Max(int a, int b){return a > b ? a : b;}
+
+int f(int i, int r){
+    printf("%d, %d, %d\n", i, r, w[i]);
+    if(i == n + 1)
+        return 0;
+    else if(r < w[i])
+        return f(i + 1, r);
+    else
+        return Max(f(i+1, r), f(i+1, r-w[i])+v[i]);
+}
+
 int main()
 {
     Input();
     mySolve(0, 0);
+    printf("%d", f(1, W));
     Output();
     return 0;
 }
