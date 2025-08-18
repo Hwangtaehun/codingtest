@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #define SIZE 7
 
 using namespace std;
@@ -9,22 +10,46 @@ int g_total[SIZE + 1];
 int g_cnt = 0, g_weight;
 bool g_end = false;
 
+//solve
+int n, scale[8] = {1, 3, 9, 27, 81, 243, 729}, chk[8], End;
+
 void Input(){
     freopen("input.txt", "r", stdin);
     scanf("%d", &g_weight);
+    n = g_weight;
     fclose(stdin);
 }
 
-bool Check(){
-    for(int i = 0; i < SIZE; i++){
-        if(!g_use[i])
-            return false;
+void Solve(int n, int sum)
+{
+    if(End)
+        return;
+
+    if(sum == n){
+        for(int c = 2; c > 0; c--){
+            for(int i = 0; i < 7; i++){
+                if(chk[i] == c)
+                    printf("%d ", scale[i]);
+            }
+            if(c == 2)
+                printf("0 ");
+        }
+        End = 1;
     }
-    return true;
+
+    for(int i = 0; i < 7; i++){
+        if(chk[i] == 0){
+            chk[i] = 1;
+            Solve(n, sum + scale[i]);
+            chk[i] = 2;
+            Solve(n + scale[i] , sum);
+            chk[i] = 0;
+        }
+    }
 }
 
 void mySolve(int left, int right){
-    if(g_end || Check()){
+    if(g_end){
         return;
     }
 
@@ -72,6 +97,8 @@ int main()
 {
     Input();
     mySolve(g_weight, 0);
+    printf("%d ", n);
+    Solve(n, 0);
     Output();
     return 0;
 }
