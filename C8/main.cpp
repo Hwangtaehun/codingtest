@@ -17,9 +17,11 @@ void Output(){
 }
 
 void mySolve(int tem, int cnt){
+    //important
     if(cnt > g_min){
         return;
     }
+    //
 
     if(tem == g_goal){
         if(cnt < g_min){
