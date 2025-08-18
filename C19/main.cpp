@@ -14,41 +14,23 @@ void Input(){
     fclose(stdin);
 }
 
-bool Check(){
-    for(int i = 0; i < SIZE; i++){
-        if(!g_use[i])
-            return false;
-    }
-    return true;
-}
-
 void mySolve(int left, int right){
     printf("%d <=> %d\n", right, left);
 
-    if(Check()){
-        return;
-    }
-
-    if(right == left){
-        int cnt = 0;
-
-        g_total[cnt] = g_weight;
-        cnt++;
+    if(left == right){
+        g_total[g_tcnt++] = g_weight;
 
         for(int i = 0; i < SIZE; i++){
             if(g_use[i] == -1){
-                g_total[cnt] = g_use[i];
-                cnt++;
+                g_total[g_tcnt++] = g_choo[i];
             }
         }
 
-        g_total[cnt] = 0;
-        cnt++;
+        g_total[g_tcnt++] = 0;
 
         for(int i = 0; i < SIZE; i++){
             if(g_use[i] == 1){
-                g_total[cnt] = g_use[i];
-                cnt++;
+                g_total[g_tcnt++] = g_choo[i];
             }
         }
 
