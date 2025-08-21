@@ -7,10 +7,22 @@ using namespace std;
 //[0]-start, [1]-goal, [2]-block
 int g_size, **g_data, g_cnt;
 
+//solve
+struct DATA {
+    int a;
+    int b;
+} data[101];
+int n;
+
+bool AscData(DATA left, DATA right){
+    return left.a < right.a;
+}
+
 void Input()
 {
     freopen("input.txt", "r", stdin);
     scanf("%d", &g_size);
+    n = g_size;
 
     g_data = new int*[g_size];
 
@@ -22,6 +34,11 @@ void Input()
         scanf("%d %d", &g_data[i][0], &g_data[i][1]);
         g_data[i][2] = 0;
     }
+
+    for(int i = 0; i < g_size; i++){
+
+    }
+
     fclose(stdin);
 }
 
@@ -30,6 +47,12 @@ void Output()
     freopen("output.txt", "w", stdout);
     printf("%d", g_cnt);
     fclose(stdout);
+
+    for(int i = 0; i < g_size; i++){
+        delete[] g_data[i];
+    }
+
+    delete[] g_data;
 }
 
 bool Asc(int* a, int* b){
@@ -121,7 +144,6 @@ int main()
 {
     Input();
     sort(g_data, g_data + g_size, Asc);
-    Testprint();
     Solve();
     Output();
     return 0;
