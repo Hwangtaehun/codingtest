@@ -36,7 +36,8 @@ void Input()
     }
 
     for(int i = 0; i < g_size; i++){
-
+        data[i+1].a = g_data[i][0];
+        data[i+1].b = g_data[i][1];
     }
 
     fclose(stdin);
@@ -106,7 +107,34 @@ bool Check(){
     return true;
 }
 
-void Solve(){
+int Solve(int k)
+{
+    int i, cnt = 1, cnt2;
+    for(i = k-1; i >= 1; i--){
+        if(data[k].b > data[i].b){
+            cnt2 = Solve(i) + 1;
+            if(cnt < cnt2)
+                cnt = cnt2;
+        }
+    }
+    return cnt;
+}
+
+int Solve2(int k)
+{
+    int i, cnt = 1, cnt2;
+    for(i = k + 1; i <= n; i++){
+        if(data[k].b < data[i].b){
+            cnt2 = Solve2(i) + 1;
+            if(cnt < cnt2)
+                cnt = cnt2;
+        }
+    }
+
+    return cnt;
+}
+
+void mySolve(){
     while(1){
         int m_index, m_big = 0;
 
@@ -142,9 +170,17 @@ void Solve(){
 
 int main()
 {
+    int i, cnt = 0, cnt2;
     Input();
     sort(g_data, g_data + g_size, Asc);
-    Solve();
+    sort(data+1, data+n+1, AscData);
+    for(i = 1; i <= n; i++){
+        cnt2 = Solve(i);
+        if(cnt < cnt2)
+            cnt =  cnt2;
+    }
+    printf("%d\n", n - cnt);
+    mySolve();
     Output();
     return 0;
 }
