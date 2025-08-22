@@ -41,6 +41,7 @@ bool isGood1(int pos){
 
 int isGood2(int pos){
     for(int j = pos - 1, i = 1; j > 0; j -= 2, i++){
+        printf("j = %d, i = %d\n", j, i);
         if(isSame(j, i)){
             return 0;
         }
@@ -66,11 +67,11 @@ void Solve(int pos){
 
 void Output()
 {
-    //freopen("output.txt", "w", stdout);
+    freopen("output.txt", "w", stdout);
     for(int i = 1; i <= g_size; i++){
         printf("%d", g_data[i]);
     }
-    //fclose(stdout);
+    fclose(stdout);
 }
 
 int main()
