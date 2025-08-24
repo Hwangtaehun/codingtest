@@ -9,6 +9,10 @@ vector< vector<char> > g_data(SIZE);
 vector<char> g_key;
 int g_cnt = 0;
 
+//solve
+char scroll[11];
+char bridge[2][21];
+
 void Input(){
     string m_key, m_data1, m_data2;
     int m_key_s, m_data_s;
@@ -28,6 +32,9 @@ void Input(){
     sprintf(g_key.data(), "%s", m_key.c_str());
     sprintf(g_data[0].data(), "%s", m_data1.c_str());
     sprintf(g_data[1].data(), "%s", m_data2.c_str());
+    sprintf(scroll, "%s", m_key.c_str());
+    sprintf(bridge[0], "%s", m_data1.c_str());
+    sprintf(bridge[1], "%s", m_data2.c_str());
 }
 
 void Testprint(){
@@ -55,7 +62,7 @@ int Trans(int ud){
 }
 
 void mySolve(int focus, int ud, int index){
-    int m_col = Trans(ud);
+    int m_row = Trans(ud);
 
     if(focus == g_key.size()){
         g_cnt++;
@@ -64,12 +71,31 @@ void mySolve(int focus, int ud, int index){
 
     //important
     for(int i = index; i < g_data[0].size(); i++){
-        if(g_key[focus] == g_data[m_col][i]){
+        if(g_key[focus] == g_data[m_row][i]){
             mySolve(focus + 1, -ud, i + 1);
         }
     }
 
     return;
+}
+
+int Solve(int row, int n, int rp){
+    int i, c = 0, next;
+
+    if(scroll[rp] == '\0')
+        return 1;
+
+    for(i = n; bridge[row][i] != '\0'; i++){
+        if(bridge[row][i] == scroll[rp]){
+            printf("%d,%c  ", i, scroll[rp]);
+            next = (row == 0) ? 1 : 0;
+            c += Solve(next, i + 1, rp + 1);
+            if(c > 0)
+                printf("---\n");
+        }
+    }
+
+    return c;
 }
 
 int main()
@@ -78,6 +104,7 @@ int main()
     //Testprint();
     mySolve(0, 1, 0);
     mySolve(0, -1, 0);
+    printf("\n%d\n", Solve(0, 0, 0) + Solve(1, 0, 0));
     Output();
     return 0;
 }
