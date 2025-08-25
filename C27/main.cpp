@@ -9,15 +9,49 @@ vector< vector<int> > g_island;
 bool *g_visited;
 int g_cnt = 0, g_size;
 
+//solve
+int n;
+int p[500], d[500], g[500];
+
+bool isGo(int a, int k){
+    return p[k] <= p[a] + d[a];
+}
+
+bool isBack(int b, int k){
+    return (p[k] <= p[b] + d[k]) && g[k];
+}
+
+int Solve(int a, int b, int k){
+    int c = 0;
+    if( k == n-1) {
+        if(isGo(a, k) && isBack(b, k)){
+            c = 1;
+        }else{
+            c = 0;
+        }
+    } else {
+        if(isGo(a, k))
+            c += Solve(k, b, k + 1);
+        if(isBack(b,k))
+            c += Solve(a, k, k + 1);
+        c += Solve(a, b, k + 1);
+    }
+    return c;
+}
+
 void Input(){
     freopen("input.txt", "r", stdin);
     scanf("%d", &g_size);
+    n = g_size;
     g_island.resize(g_size);
     g_visited = new bool[g_size];
 
     for(int i = 0; i < g_size; i++){
         g_island[i].resize(SIZE);
         scanf("%d %d %d", &g_island[i][0], &g_island[i][1], &g_island[i][2]);
+        p[i] = g_island[i][0];
+        d[i] = g_island[i][1];
+        g[i] = g_island[i][2];
         g_visited[i] = false;
     }
     fclose(stdin);
@@ -85,6 +119,7 @@ int main()
     Input();
     //Testprint();
     mySolve(0, 0);
+    printf("%d\n", Solve(0, 0, 1) % 1000);
     Output();
     return 0;
 }
