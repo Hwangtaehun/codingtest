@@ -53,7 +53,7 @@ bool isPrime(int k){
 
 void Prime1(){
     int i, cnt = 0;
-    for(int i = 2; i < 100000; i++){
+    for(i = 2; i < 100000; i++){
         if(isPrime(i)){
             cnt++;
             if(cnt == n)
@@ -74,7 +74,7 @@ void Prime2(){
             if(cnt >= n)
                 break;
             for(j = i + i; j <= 100000; j += i){
-                array[i] = 0;
+                array[j] = 0;
             }
         }
     }
