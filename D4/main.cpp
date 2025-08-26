@@ -9,10 +9,18 @@ int g_used[SIZE] = {0};
 int g_num, g_end = 0;
 vector<int> g_result;
 
+//solve
+int scale[SIZE] = {1, 3, 9, 27, 81, 243, 729};
+int outScale[SIZE + 2];
+int three[SIZE];
+int n, x;
+
 void Input(){
     freopen("input.txt", "r", stdin);
     scanf("%d", &g_num);
     fclose(stdin);
+    n = g_num;
+    outScale[x++] = n;
 }
 
 void Output(){
@@ -68,9 +76,52 @@ void mySolve(int left, int right){
     }
 }
 
+void ArrayPrn(){
+    for(int i = 6; i >= 0; i--){
+        printf("%d ", three[i]);
+    }
+    printf("\n");
+}
+
+void toThree(int num){
+    //printf(" %d \t", num);
+    for(int i = 0; num != 0; i++){
+        three[i] = num % 3;
+        num /= 3;
+    }
+    //ArrayPrn();
+}
+
+bool isTwo(){
+    for(int i = 0; i < SIZE; i++){
+        if(three[i] == 2){
+            n = n + scale[i];
+            outScale[x++] = scale[i];
+            return true;
+        }
+    }
+    return false;
+}
+
 int main()
 {
     Input();
+    do{
+        toThree(n);
+    }while(isTwo());
+
+    x++;
+
+    for(int i = 0; i < SIZE; i++){
+        if(three[i] == 1){
+            outScale[x++] = scale[i];
+        }
+    }
+
+    for(int i = 0; i < x; i++){
+        printf("%d ", outScale[i]);
+    }
+
     mySolve(g_num, 0);
     Output();
     return 0;
