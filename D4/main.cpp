@@ -16,11 +16,11 @@ void Input(){
 }
 
 void Output(){
-    //freopen("output.txt", "w", stdout);
+    freopen("output.txt", "w", stdout);
     for(int i = 0; i < g_result.size(); i++){
         printf("%d ", g_result.at(i));
     }
-    //fclose(stdout);
+    fclose(stdout);
 }
 
 bool Check(){
