@@ -19,9 +19,9 @@ void Input(){
 }
 
 void Output(){
-    //freopen("output.txt", "w", stdout);
+    freopen("output.txt", "w", stdout);
     printf("%d", g_data.size());
-    //fclose(stdout);
+    fclose(stdout);
 }
 
 bool mup_check(int a, int b, int c){
