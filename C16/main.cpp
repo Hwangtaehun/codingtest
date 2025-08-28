@@ -3,13 +3,13 @@
 
 using namespace std;
 
-int g_cost, g_size, g_cnt = 0x7fffffff;
+int g_cost, g_kind, g_cnt = 0x7fffffff;
 vector<int> g_coin;
 
 void Input(){
     freopen("input.txt", "r", stdin);
-    scanf("%d %d", &g_cost, &g_size);
-    for(int i = 0; i < g_size; i++){
+    scanf("%d %d", &g_cost, &g_kind);
+    for(int i = 0; i < g_kind; i++){
         int m_coin;
         scanf("%d", &m_coin);
         g_coin.push_back(m_coin);
@@ -24,7 +24,7 @@ void Output(){
 }
 
 void TestPrint(){
-    printf("g_cost = %d, g_size = %d\n", g_cost, g_size);
+    printf("g_cost = %d, g_size = %d\n", g_cost, g_kind);
     for(int i = 0; i < g_coin.size(); i++){
         printf("%d ", g_coin[i]);
     }
@@ -32,7 +32,7 @@ void TestPrint(){
 }
 
 void mySolve(int index, int rest, int cnt){
-    if(cnt > g_cnt || index >= g_size){
+    if(cnt > g_cnt || index >= g_kind){
         return;
     }
 
