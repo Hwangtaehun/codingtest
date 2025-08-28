@@ -3,31 +3,35 @@
 
 using namespace std;
 
-struct StartEnd{
-    int s;
-    int e;
-};
-
 int g_edge, g_size;
-vector<StartEnd> g_data;
-vector<int> g_color; // 0:nothing, 1: black, 2: white
-bool possible = false;
+vector< vector<int> > g_data;
+vector<int> g_color; // 0:nothing, 1: black, -1: white
 
 void Input(){
     freopen("input.txt", "r", stdin);
 
     scanf("%d %d", &g_edge, &g_size);
+    g_data.resize(g_edge);
     g_color.resize(g_edge);
     for(int i = 0; i < g_size; i++){
         int a, b;
         scanf("%d %d", &a, &b);
-        g_data.push_back((StartEnd){a, b});
+        g_data[a].push_back(b);
+        g_data[b].push_back(a);
     }
 
     fclose(stdin);
 }
 
 void Output(){
+    bool possible = true;
+
+    for(int i = 0; i < g_color.size(); i++){
+        if(g_color[i] == 0){
+            possible = false;
+        }
+    }
+
     freopen("output.txt", "w", stdout);
 
     if(possible){
@@ -40,41 +44,45 @@ void Output(){
 }
 
 void TestPrint(){
+    printf("g_edge = %d, g_size = %d\n", g_edge, g_size);
+
+    for(int i = 0; i < g_data.size(); i++){
+        for(int j = 0; j < g_data[i].size(); j++){
+            printf("%d ", g_data[i][j]);
+        }
+        printf("\n");
+    }
+
     printf("g_color size = %d\n", g_color.size());
+
     for(int i = 0; i < g_color.size(); i++){
         printf("%d ", g_color[i]);
     }
 }
 
-bool Check(){
-    for(int i = 0; i < g_size; i++){
-        if(g_color[g_data[i].s] == g_color[g_data[i].e]){
-            return false;
+void mySolve(int n, int c){
+    g_color[n] = c;
+
+    for(int i = 0; i < g_data[n].size(); i++){
+        if(g_color[g_data[n][i]] == c){
+            g_color[n] = 0;
+            return;
         }
     }
 
-    return true;
-}
-
-void mySolve(int cnt){
-    if(cnt == g_size){
-        if(!possible){
-            possible = Check();
+    for(int i = 0; i < g_data[n].size(); i++){
+        if(g_color[g_data[n][i]] == 0){
+            mySolve(g_data[n][i], 1);
+            mySolve(g_data[n][i], -1);
         }
-        return;
     }
-
-    g_color[cnt] = 1;
-    mySolve(cnt+1);
-    g_color[cnt] = 2;
-    mySolve(cnt+1);
 }
 
 int main()
 {
     Input();
-    //TestPrint();
-    mySolve(0);
+    TestPrint();
+    mySolve(0, 1);
     Output();
     return 0;
 }
