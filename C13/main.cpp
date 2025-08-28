@@ -28,7 +28,7 @@ void Input(){
 }
 
 void Output(){
-    //freopen("output.txt", "w", stdout);
+    freopen("output.txt", "w", stdout);
 
     if(possible){
         printf("OK");
@@ -36,7 +36,7 @@ void Output(){
         printf("IMPOSSIBLE");
     }
 
-    //fclose(stdout);
+    fclose(stdout);
 }
 
 void TestPrint(){
