@@ -14,9 +14,9 @@ void Input(){
 }
 
 void Output(){
-    //freopen("output.txt", "w", stdout);
+    freopen("output.txt", "w", stdout);
     printf("%d", g_min);
-    //fclose(stdout);
+    fclose(stdout);
 }
 
 void Print(vector<int> arr){
