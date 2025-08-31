@@ -30,14 +30,14 @@ bool myCheck(vector<int> arr){
     for(int i = 0; i < arr.size(); i++){
         int m_itv = (arr.size() - i) / 2;
         for(int j = 1; j <= m_itv; j++){
-            bool same = true;
+            bool m_same = true;
             for(int k = 0; k < j; k++){
                 if(arr[k + i] != arr[k + i + j]){
-                    same = false;
+                    m_same = false;
                 }
             }
 
-            if(same){
+            if(m_same){
                 return true;
             }
         }
