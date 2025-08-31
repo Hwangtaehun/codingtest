@@ -8,6 +8,9 @@ using namespace std;
 vector<int> g_data;
 int g_result;
 
+//solve
+bool bFirst = true;
+
 void Input(){
     string m_str;
 
@@ -42,8 +45,32 @@ void mySolve(){
     g_result = num;
 }
 
+void Solve1(int n){
+    if(n == 0)
+        return;
+    printf("%d", n%10);
+    Solve1(n/10);
+}
+
+void Solve2(int n){
+    if(n == 0)
+        return;
+    if(!bFirst || (n%10) != 0)
+    {
+        printf("%d", n%10);
+        bFirst = 0;
+    }
+    Solve2(n / 10);
+}
+
 int main()
 {
+    int n;
+    scanf("%d", &n);
+    Solve1(n);
+    printf("\n");
+    Solve2(n);
+
     Input();
     mySolve();
     Output();
