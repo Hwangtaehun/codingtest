@@ -69,10 +69,23 @@ void mySolve(){
     }
 }
 
+int Solve(int a, int b){
+    if(a == b)
+        return 0;
+    if(b > a)
+        return Solve(a, b / 2) + 1;
+    if(a > b)
+        return Solve(a / 2, b) + 1;
+}
+
 int main()
 {
+    int a, b;
     Input();
+    a = g_s;
+    b = g_e;
     mySolve();
+    printf("%d\n", Solve(a, b));
     Output();
     return 0;
 }
