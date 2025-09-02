@@ -16,6 +16,7 @@ void Print(){
         }
         printf("\n");
     }
+    printf("\n");
 }
 
 bool Check(int x, int y, int r, int c){
@@ -40,6 +41,7 @@ void Draw(int x, int y, int r, int c){
 void Input(){
     freopen("input.txt", "r", stdin);
     scanf("%d", &g_size);
+    n = g_size;
     g_data.resize(g_size);
     for(int i = 0; i < g_size; i++){
         g_data[i].resize(g_size);
@@ -48,6 +50,7 @@ void Input(){
     for(int i = 0; i < g_size; i++){
         for(int j = 0; j < g_size; j++){
             scanf("%d", &g_data[i][j]);
+            s[i][j] = g_data[i][j];
         }
     }
     fclose(stdin);
@@ -77,20 +80,46 @@ void mySolve(int divide){
             }
 
             if(Check(x, y, m_range, 0)){
-                Draw(x, y, m_range, 2);
+                Draw(x, y, m_range, 9);
                 g_white++;
             }
         }
         x += m_range;
     }
 
+    //Print();
     mySolve(divide * 2);
+}
+
+void Solve(int a, int b, int n){
+    bool isOne = true;
+    for(int i = a; i < a + n; i++){
+        for(int j = b; j < b + n; j++){
+            if(s[a][b] != s[i][j])
+                isOne = false;
+        }
+    }
+
+    if(isOne){
+        if(s[a][b] == 1)
+            white++;
+        else
+            gray++;
+        return;
+    }else{
+        Solve(a, b, n / 2);
+        Solve(a + n / 2, b, n / 2);
+        Solve(a, b + n / 2, n / 2);
+        Solve(a + n / 2, b + n / 2, n / 2);
+    }
 }
 
 int main()
 {
     Input();
     //Print();
+    Solve(0, 0, n);
+    printf("%d\n%d\n", gray, white);
     mySolve(1);
     Output();
     return 0;
