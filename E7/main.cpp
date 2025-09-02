@@ -7,9 +7,15 @@ int g_size;
 vector<int> g_data;
 vector<char> g_result;
 
+//solve
+char str[1<<19];
+int n;
+
 void Input(){
     freopen("input.txt", "r", stdin);
     scanf("%d", &g_size);
+    n = g_size;
+
     for(int i = 0; i < g_size; i++){
         int temp;
         scanf("%1d", &temp);
@@ -57,10 +63,31 @@ void mySolve(int x, int range){
     }
 }
 
+void Solve(int k, int s){
+    int sum = 0;
+
+    if(s == 1){
+        printf("%c", str[k]);
+        return;
+    }
+
+    for(int i = k; i < k + s; i++)
+        sum += (str[i] - '0');
+    if(sum == 0 || sum == s)
+        printf("%d", (bool)sum);
+    else{
+        printf("-");
+        Solve(k, s/2);
+        Solve(k + s/2, s/2);
+    }
+}
+
 int main()
 {
+    scanf("%s", str);
     Input();
     //Print();
+    Solve(0, n);
     mySolve(0, g_size);
     Output();
     return 0;
