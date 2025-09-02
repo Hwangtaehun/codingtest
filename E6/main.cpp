@@ -6,6 +6,9 @@ using namespace std;
 vector< vector<int> > g_data;
 int g_size, g_white = 0, g_black = 0;
 
+//solve
+int s[1<<7][1<<7], n, gray, white;
+
 void Print(){
     for(int i = 0; i < g_size; i++){
         for(int j = 0; j < g_size; j++){
@@ -88,7 +91,7 @@ int main()
 {
     Input();
     //Print();
-    mySolve(2);
+    mySolve(1);
     Output();
     return 0;
 }
