@@ -6,6 +6,9 @@ using namespace std;
 vector< vector<int> >g_data;
 int g_size;
 
+//solve
+int a[30], cnt;
+
 void Input(){
     freopen("input.txt", "r", stdin);
     scanf("%d", &g_size);
@@ -13,7 +16,7 @@ void Input(){
 }
 
 void Output(){
-    //freopen("output.txt", "w", stdout);
+    freopen("output.txt", "w", stdout);
     for(int i = 0; i < g_data.size(); i++){
         for(int j = 0; j < g_size; j++){
             if(g_data[i][j] != 0){
@@ -22,7 +25,7 @@ void Output(){
         }
         printf("\n");
     }
-    //fclose(stdout);
+    fclose(stdout);
 }
 
 int Sum(int arr[]){
@@ -56,9 +59,29 @@ void mySolve(int arr[], int num, int index){
     }
 }
 
+void Solve(int n, int k){
+    int min;
+    if(n == 0){
+        for(int i = 0; i < cnt; i++){
+            printf("%d ", a[i]);
+        }
+        printf("\n");
+        return;
+    }
+
+    min = n < k ? n : k;
+    for(int i = min; i >= 1; i--){
+        a[cnt++] = i;
+        Solve(n-i, i);
+        cnt--;
+    }
+}
+
 int main()
 {
     Input();
+    int n = g_size;
+    Solve(n, n);
     int *m_arr = new int[g_size];
 
     for(int i = g_size; i > 0; i--){
