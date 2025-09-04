@@ -2,6 +2,8 @@
 
 using namespace std;
 
+int DT[100001];
+
 int Fibonacci(int n){
     if(n == 0){
         return 0;
@@ -15,10 +17,29 @@ int Fibonacci(int n){
     }
 }
 
+int f1(int n){
+    if(n <= 2){
+        return 1;
+    }
+    return f1(n - 1) + f1(n - 2);
+}
+
+int f2(int n){
+    if(n <= 2){
+        return 1;
+    }
+    else if(!DT[n]){
+        DT[n] = f2(n-1) + f2(n-2);
+    }
+    return DT[n];
+}
+
 int main()
 {
-    int m_n;
-    cin >> m_n;
-    cout << Fibonacci(m_n) << endl;
+    int n;
+    cin >> n;
+    cout << Fibonacci(n) << endl;
+    cout << f1(n) << endl;
+    cout << f2(n) << endl;
     return 0;
 }
