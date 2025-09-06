@@ -4,10 +4,16 @@ using namespace std;
 
 int g_n, g_r, g_final;
 
+//Solve
+int N, K, ans, DT[31][31];
+
 void Input(){
     freopen("input.txt", "r", stdin);
     scanf("%d %d", &g_n, &g_r);
     fclose(stdin);
+
+    N = g_n;
+    K = g_r;
 }
 
 void Output(){
@@ -32,9 +38,38 @@ void mySolve(){
     g_final = m_n / m_r;
 }
 
+void solve(int n, int k){
+    if(k == K){
+        ans++;
+        return;
+    }
+
+    if(n == N)
+        return;
+
+    solve(n + 1, k + 1);
+    solve(n + 1, k);
+}
+
+int f(int n, int k){
+    if(k == K)
+        return 1;
+
+    if(n == N)
+        return 0;
+
+    if(!DT[n][k])
+        DT[n][k] = f(n + 1, k + 1) + f(n + 1, k);
+
+    return DT[n][k];
+}
+
 int main()
 {
     Input();
+    solve(0, 0);
+    printf("%d\n", ans);
+    printf("%d\n", f(0, 0));
     mySolve();
     Output();
     return 0;
