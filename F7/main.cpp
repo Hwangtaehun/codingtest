@@ -1,21 +1,37 @@
 #include <cstdio>
 #include <vector>
+#include <cstdlib>
 
 using namespace std;
 
 int g_n, g_m, g_a, g_b, g_x, g_y, g_min = 0x0FFFFFFF; // a: start, b: goal, x: remove, y: add
 vector<int> g_line;
 
+//solve
+int n, m, a, b, x, y, p[501], DT[501][101];
+
 void Input(){
     freopen("input.txt", "r", stdin);
     scanf("%d %d", &g_n, &g_m);
     scanf("%d %d %d %d", &g_a, &g_b, &g_x, &g_y);
     for(int i = 0; i < g_m; i++){
-        int t;
-        scanf("%d", &t);
-        g_line.push_back(t);
+        scanf("%d", &p[i+1]);
+        g_line.push_back(p[i+1]);
     }
     fclose(stdin);
+
+    n = g_n;
+    m = g_m;
+    a = g_a;
+    b = g_b;
+    x = g_x;
+    y = g_y;
+
+    for(int i = 0; i <= m; i++){
+        for(int j = 0; j <= n; j++){
+            DT[i][j] = 99999999;
+        }
+    }
 }
 
 void Output(){
@@ -65,9 +81,36 @@ void mySolve(int cur, int index, int cost){
     mySolve(m_cur, index + 1, cost);
 }
 
+int isIn(int a, int b, int k){
+    return ((a <= k && k < b) || (b <= k && k < a)) ? 1:0;
+}
+
+void Solve(){
+    for(int j = 1; j <= n; j++){
+        DT[0][j] = abs(j - a) * y;
+    }
+
+    for(int i = 1; i <= m; i++){
+        for(int j = 1; j <= n; j++){
+            for(int k = 1; k <= n; k++){
+                if(j == k && (p[i] == k || p[i] + 1 == k)){
+                    DT[i][j] = (DT[i - 1][k] + x < DT[i][j]) ? DT[i - 1][k] + x : DT[i][j];
+                }else if(isIn(j, k, p[i])){
+                    DT[i][j] = DT[i - 1][k] + (abs(j - k) - 1) * y < DT[i][j] ? DT[i - 1][k] + (abs(j - k) - 1) * y : DT[i][j];
+                }else{
+                    DT[i][j] = DT[i - 1][k] + abs(j - k) * y < DT[i][j] ? DT[i - 1][k] + abs(j - k) * y : DT[i][j];
+                }
+            }
+        }
+    }
+
+    printf("%d\n", DT[m][b]);
+}
+
 int main()
 {
     Input();
+    Solve();
     mySolve(g_a, 0, 0);
     Output();
     return 0;
