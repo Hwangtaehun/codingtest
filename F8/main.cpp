@@ -11,17 +11,40 @@ vector<char> g_code;
 vector<string> g_data;
 vector<char> g_result;
 
+//solve
+#include <map>
+char str, strvalue[30], data[300], tree[1500000];
+int k;
+map<string, char> mp;
+
 void Input(){
     freopen("input.txt", "r", stdin);
-    cin >> g_size;
+
+    scanf("%d", &g_size);
+    k = g_size;
     for(int i = 0; i < g_size; i++){
-        char m_char;
+        int idx = 1;
         string m_temp;
-        cin >> m_char >> m_temp;
-        g_code.push_back(m_char);
+        cin >> str >> strvalue;
+        m_temp.assign(strvalue);
+        g_code.push_back(str);
         g_data.push_back(m_temp);
+
+        mp[m_temp] = str;
+
+        for(int j = 0; strvalue[j] != '\0'; j++){
+            if(strvalue[j] == '0'){
+                idx = idx * 2;
+            }else{
+                idx = idx * 2 + 1;
+            }
+        }
+        tree[idx] = str;
     }
-    cin >> g_binary;
+
+    scanf("%s", data);
+    g_binary.assign(data);
+
     fclose(stdin);
 }
 
@@ -86,10 +109,39 @@ void mySolve(int index, bool zero, vector<char> data){
     mySolve(index + 1, zero, data);
 }
 
+void Solve1(){
+    int idx = 1;
+    for(int i = 0; data[i] != '\0'; i++){
+        if(data[i] == '0')
+            idx = 2 * idx;
+        else
+            idx = 2 * idx + 1;
+
+        if(tree[idx] != 0){
+            printf("%c", tree[idx]);
+            idx = 1;
+        }
+    }
+    printf("\n");
+}
+
+void Solve2(){
+    string a, m_str = g_binary;
+    for(int i = 0; i < m_str.length(); i++){
+        a += m_str[i];
+        if(mp[a]){
+            cout << mp[a];
+            a.clear();
+        }
+    }
+}
+
 int main()
 {
     vector<char> m_data;
     Input();
+    Solve1();
+    Solve2();
     mySolve(0, false, m_data);
     Output();
     return 0;
