@@ -70,43 +70,21 @@ void Whole_Print(){
     }
 }
 
-void mySolve(int index, bool zero, vector<char> data){
-    string m_rs;
-    int m_leng;
+void mySolve(){
+    vector<char> data;
 
-    if(g_size == 3){
-        m_leng = 2;
-    }else{
-        m_leng = g_size - 2;
-    }
-
-    if(g_binary.length() == index){
-        return;
-    }
-
-    data.push_back(g_binary[index]);
-
-    if(g_binary[index] == '0'){
-        zero = true;
-    }
-
-    if(zero && data.size() >= 2){
+    for(int i = 0; i < g_binary.size(); i++){
+        string m_rs;
+        data.push_back(g_binary[i]);
         m_rs.assign(data.begin(), data.end());
-    }else if(data.size() == m_leng){
-        m_rs.assign(data.begin(), data.end());
-    }
 
-    if(!m_rs.empty()){
-        data.clear();
-        zero = false;
         for(int i = 0; i < g_size; i++){
             if(!m_rs.compare(g_data[i])){
                 g_result.push_back(g_code[i]);
+                data.clear();
             }
         }
     }
-
-    mySolve(index + 1, zero, data);
 }
 
 void Solve1(){
@@ -138,11 +116,10 @@ void Solve2(){
 
 int main()
 {
-    vector<char> m_data;
     Input();
     Solve1();
     Solve2();
-    mySolve(0, false, m_data);
+    mySolve();
     Output();
     return 0;
 }
