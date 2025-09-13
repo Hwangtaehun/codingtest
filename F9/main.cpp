@@ -1,9 +1,8 @@
 #include <cstdio>
-#include <iostream>
 #include <string>
 #include <vector>
 #include <algorithm>
-#define REST 1000000003
+#define MOD 1000000003
 
 using namespace std;
 
@@ -11,9 +10,15 @@ int g_size, g_choose, g_result;
 bool *g_used;
 vector<string> g_data;
 
+//solve
+#include <memory.h>
+int DT1[1001][1001], DT2[1001][1001][2], n, k;
+
 void Input(){
     freopen("input.txt", "r", stdin);
     scanf("%d %d", &g_size, &g_choose);
+    n = g_size;
+    k = g_choose;
     fclose(stdin);
     g_used = new bool[g_size];
     for(int i = 0; i < g_size; i++){
@@ -22,7 +27,7 @@ void Input(){
 }
 
 void Output(){
-    g_result = g_data.size() % REST;
+    g_result = g_data.size() % MOD;
     freopen("output.txt", "w", stdout);
     printf("%d", g_result);
     fclose(stdout);
@@ -68,7 +73,7 @@ void Print(){
 }
 
 void mySolve(int cnt){
-    if(cnt == g_choose){
+    if(cnt >= g_choose){
         if(Count() == g_choose){
             vector<char> m_cho;
             for(int i = 0; i < g_size; i++){
@@ -80,15 +85,13 @@ void mySolve(int cnt){
             sort(m_cho.begin(), m_cho.end());
             string m_result(m_cho.begin(), m_cho.end());
 
-            //cout << "m_result = " << m_result << endl;
-
             if(g_data.size() == 0){
                 g_data.push_back(m_result);
                 return;
             }
 
             for(int i = 0; i < g_data.size(); i++){
-                if(g_data[i].compare(m_result)){
+                if(g_data[i] != m_result){
                     g_data.push_back(m_result);
                 }
             }
@@ -99,15 +102,39 @@ void mySolve(int cnt){
     for(int i = 0; i < g_size; i++){
         if(!g_used[i] && Check(i))
         g_used[i] = true;
-        //Print();
         mySolve(cnt + 1);
         g_used[i] = false;
     }
 }
 
+int f1(int n, int k){
+    if(k > n / 2){
+        DT1[n][k] = 0;
+    }else if(k == 1){
+        DT1[n][k] = n;
+    }else{
+        DT1[n][k] = (f1(n - 2, k - 1) + f1(n - 1, k)) % MOD;
+    }
+
+    return DT1[n][k];
+}
+
+int f2(int a, int b, bool can){
+    if(a >= n || b == k){
+        return (int)((b == k) && (a <= n || can));
+    }else if(DT2[a][b][can] == -1){
+        DT2[a][b][can] = (f2(a + 1, b, can) + f2(a + 2, b + 1, can)) % MOD;
+    }
+
+    return DT2[a][b][can];
+}
+
 int main()
 {
     Input();
+    printf("%d\n", f1(n, k));
+    memset(DT2, -1, sizeof(DT2));
+    printf("%d\n", (f2(1, 0, true) + f2(2, 1, false)) % MOD);
     mySolve(0);
     Output();
     return 0;
