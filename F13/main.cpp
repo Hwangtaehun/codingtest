@@ -40,8 +40,8 @@ bool Check(int r, int c){
     return false;
 }
 
-bool Availble(int r, int c){
-    if((double)g_row/g_col <= (double)r/c){
+bool Avail(int r, int c){
+    if(!c || (double)g_row/g_col <= (double)r/c){
         return true;
     }
     return false;
@@ -50,7 +50,7 @@ bool Availble(int r, int c){
 void mySolve(){
     for(int i = 1; i <= g_row; i++){
         for(int j = 0; j <= g_col; j++){
-            if(Availble(i, j) || j == g_col){
+            if(Avail(i, j) || j == g_col){
                 int a = 0, b = 0;
                 if(Check(i - 1, j)){
                     a = g_data[i - 1][j];
@@ -67,7 +67,6 @@ void mySolve(){
 int main()
 {
     Input();
-    //Print();
     mySolve();
     Output();
     return 0;
