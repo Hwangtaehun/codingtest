@@ -12,18 +12,28 @@ int g_size, g_cnt, g_dis = 0;
 vector<ROWCOL> g_route; // -1:place
 vector<ROWCOL> g_car;
 
+//solve
+#include <memory.h>
+#define INF 0x3f3f3f
+
+int DT[1100][1100], E[1010][2], n, m, ans = INF;
+
 void Input(){
     freopen("input.txt", "r", stdin);
     scanf("%d %d", &g_size, &g_cnt);
-    for(int i = 0; i < g_cnt; i++){
-        int m_x, m_y;
-        scanf("%d %d", &m_x, &m_y);
-        g_route.push_back((ROWCOL){m_x, m_y});
+    for(int i = 2; i < g_cnt + 2; i++){
+        scanf("%d %d", &E[i][0], &E[i][1]);
+        g_route.push_back((ROWCOL){E[i][0], E[i][1]});
     }
     fclose(stdin);
 
     g_car.push_back((ROWCOL){1, 1});
     g_car.push_back((ROWCOL){g_size, g_size});
+
+    n = g_size;
+    m = g_cnt;
+    E[0][0] = E[0][1] = 1;
+    E[1][0] = E[1][1] = n;
 }
 
 void Output(){
@@ -32,12 +42,68 @@ void Output(){
     fclose(stdout);
 }
 
-int Abs(int num){
-    if(num < 0){
-        return -num;
-    }else{
-        return num;
+int Abs(int a){
+    return a > 0 ? a : -a;
+}
+
+int Min(int a, int b){
+    return a > b ? b : a;
+}
+
+int dis(int a, int b){
+    return Abs(E[a][0] - E[b][0]) + Abs(E[a][1] - E[b][1]);
+}
+
+int f1(int a, int b){
+    int next = (a > b ? a : b) + 1;
+
+    if(next >= m + 2)
+        return 0;
+
+    return Min(f1(next, b) + dis(a, next), f1(a, next) + dis(b, next));
+}
+
+int f2(int a, int b){
+    if(DT[a][b] == 0){
+        int next = (a > b ? a : b) + 1;
+
+        if(next >= m + 2){
+            DT[a][b] = 0;
+        }else{
+            DT[a][b] = Min(f2(next, b) + dis(a, next), f2(a, next) + dis(b, next));
+        }
     }
+    return DT[a][b];
+}
+
+void Solve(){
+    memset(DT, 0x3f, sizeof(DT));
+    DT[0][1] = 0;
+
+    for(int i = 0; i < m + 2; i++){
+        for(int j = 1; j < m + 2; j++){
+            if(i == j){
+                DT[i][j] = INF;
+            }else if(i > j){
+                if(i - 1 > j){
+                    DT[i][j] = DT[i - 1][j] + dis(i - 1, i);
+                }else{
+                    for(int k = 0; k < j; k++){
+                        DT[i][j] = Min(DT[i][j], DT[k][j] + dis(k, i));
+                    }
+                }
+            }else{
+                for(int k = 1; k < i; k++){
+                    DT[i][j] = Min(DT[i][j], DT[i][k] + dis(k, j));
+                }
+            }
+        }
+    }
+
+    for(int i = 0; i < m + 2; i++){
+        ans = Min(ans, Min(DT[i][m + 1], DT[m + 1][i]));
+    }
+    printf("%d\n", ans);
 }
 
 void mySolve(){
@@ -62,6 +128,10 @@ void mySolve(){
 int main()
 {
     Input();
+    printf("%d\n", f1(0, 1));
+    printf("%d\n", f2(0, 1));
+    memset(DT, 0, sizeof(DT));
+    Solve();
     mySolve();
     Output();
     return 0;
