@@ -80,27 +80,22 @@ void Solve(){
     memset(DT, 0x3f, sizeof(DT));
     DT[0][1] = 0;
 
-    for(int i = 0; i < m + 2; i++){
-        for(int j = 1; j < m + 2; j++){
-            if(i == j){
-                DT[i][j] = INF;
-            }else if(i > j){
-                if(i - 1 > j){
-                    DT[i][j] = DT[i - 1][j] + dis(i - 1, i);
-                }else{
-                    for(int k = 0; k < j; k++){
-                        DT[i][j] = Min(DT[i][j], DT[k][j] + dis(k, i));
-                    }
-                }
-            }else{
-                for(int k = 1; k < i; k++){
-                    DT[i][j] = Min(DT[i][j], DT[i][k] + dis(k, j));
-                }
-            }
+    for (int i = 0; i < m + 1; i++) {
+        for (int j = 0; j < m + 1; j++) {
+
+            int next = (i > j ? i : j) + 1;
+            if (next > m + 1) continue;
+
+            int dist_i_next = (i == 0) ? dis(0, next) : dis(i, next);
+            DT[next][j] = Min(DT[next][j], DT[i][j] + dist_i_next);
+
+            int dist_j_next = (j == 0) ? dis(1, next) : dis(j, next);
+            DT[i][next] = Min(DT[i][next], DT[i][j] + dist_j_next);
         }
     }
 
-    for(int i = 0; i < m + 2; i++){
+    ans = INF;
+    for (int i = 0; i < m + 1; i++) {
         ans = Min(ans, Min(DT[i][m + 1], DT[m + 1][i]));
     }
     printf("%d\n", ans);
