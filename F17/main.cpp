@@ -135,7 +135,7 @@ void Solve1(){
         for(int j = 0; j < n; j++){
             if(i == 0 && j == 0){
                 DT[i][j] = 1;
-            }else if(i != j || i == n - 1 && j == n - 1){
+            }else if((i != j || i == n - 1)&& j == n - 1){
                 if(i > j){
                     for(int k = 0; k < i; k++){
                         if(D[k] + S[k] >= D[i]){
