@@ -24,9 +24,9 @@ void Input(){
 }
 
 void Output(){
-    //freopen("output.txt", "w", stdout);
-    printf("%d", g_cnt);
-    //fclose(stdout);
+    freopen("output.txt", "w", stdout);
+    printf("%d", g_cnt % REST);
+    fclose(stdout);
 }
 
 void Print(){
