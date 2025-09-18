@@ -7,6 +7,10 @@ int g_size, g_min = 0x0FFFFFFF;
 vector< vector<int> > g_data;
 vector<bool> g_used;
 
+//solve
+#define INF 987654321
+int m[21][21], DT[1 << 20], col_check[21], n, bit;
+
 void Input(){
     freopen("input.txt", "r", stdin);
     scanf("%d", &g_size);
@@ -59,6 +63,45 @@ void mySolve(int index, int sum){
             g_used[i] = false;
         }
     }
+}
+
+int Min(int a, int b){
+    return a > b ? b : a;
+}
+
+int Solve(int row){
+    int ans = INF;
+
+    if(row == n){
+        return 0;
+    }
+
+    for(int i = 0; i < n; i++){
+        if(col_check[i] == 0){
+            col_check[i] = 1;
+            ans = Min(ans, Solve(row + 1) + m[row][i]);
+            col_check[i] = 0;
+        }
+    }
+
+    return ans;
+}
+
+int f(int row, int bit){
+    if(row == n){
+        return 0;
+    }
+
+    if(DT[bit] == 0){
+        DT[bit] = INF;
+        for(int i = 0; i < n; i++){
+            if((bit & (1 << i)) == 0){
+                DT[bit] = Min(DT[bit], f(row + 1, bit + (1 << i)) + + m[row][i]);
+            }
+        }
+    }
+
+    return DT[bit];
 }
 
 int main()
