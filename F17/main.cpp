@@ -2,7 +2,7 @@
 #include <vector>
 #define COL 3
 #define END 15
-#define REST 1000
+#define MOD 1000
 
 using namespace std;
 
@@ -25,7 +25,7 @@ void Input(){
 
 void Output(){
     freopen("output.txt", "w", stdout);
-    printf("%d", g_cnt % REST);
+    printf("%d", g_cnt % MOD);
     fclose(stdout);
 }
 
