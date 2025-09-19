@@ -51,6 +51,7 @@ void mySolve(int ind, int cnt){
 
         for(int i = 0; i < m_island.size() - 1; i++){
             int num = m_island[i + 1] - m_island[i];
+
             if(num < m_dis){
                 m_dis = num;
             }
