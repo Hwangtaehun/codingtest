@@ -86,7 +86,8 @@ void Print(int num){
 
 int f(int a, int b){
     int ans = 0;
-    Print(ans);
+    //Print(ans);
+
     if(a == g_size){
         return 0;
     }
@@ -116,7 +117,7 @@ int f(int a, int b){
         ans = Max(ans, f(a, b + 1));
     }
 
-    Print(ans);
+    //Print(ans);
     return ans;
 }
 
