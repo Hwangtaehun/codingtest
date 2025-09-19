@@ -34,10 +34,10 @@ void Print(vector<int> arr){
     printf("\n");
 }
 
-void mySolve(int cnt){
-    if(cnt == 2){
+void mySolve(int ind, int cnt){
+    if(cnt == g_mus){
         vector<int> m_island;
-        vector<int> m_dis;
+        int m_dis = 0x0FFFFFFF;
 
         m_island.push_back(0);
         for(int i = 0; i < g_cnt; i++){
@@ -51,20 +51,20 @@ void mySolve(int cnt){
 
         for(int i = 0; i < m_island.size() - 1; i++){
             int num = m_island[i + 1] - m_island[i];
-            m_dis.push_back(num);
+            if(num < m_dis){
+                m_dis = num;
+            }
         }
 
-        sort(m_dis.begin(), m_dis.end());
-
-        if(m_dis[0] > g_max){
-            g_max = m_dis[0];
+        if(m_dis > g_max){
+            g_max = m_dis;
         }
     }
 
-    for(int i = 0; i < g_cnt; i++){
+    for(int i = ind; i < g_cnt; i++){
         if(!g_used[i]){
             g_used[i] = true;
-            mySolve(cnt + 1);
+            mySolve(ind + 1, cnt + 1);
             g_used[i] = false;
         }
     }
@@ -73,7 +73,7 @@ void mySolve(int cnt){
 int main()
 {
     Input();
-    mySolve(0);
+    mySolve(0, 0);
     Output();
     return 0;
 }
