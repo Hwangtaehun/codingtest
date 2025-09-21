@@ -15,6 +15,18 @@ int g_size, g_max = 0;
 vector<vector<char> > g_data, g_grade;
 vector<vector<int> > g_used;
 
+//solve
+#include <memory.h>
+#define cu (1 << n)
+#define rt (1 << (n - 1))
+#define dn (1)
+#define M (1 << (n + 1))
+
+int p[4][4] = {100, 70, 40, 0, 70, 50, 30, 0, 40, 30, 20, 0, 0, 0, 0, 0};
+int n, tb[12][12], m[12][12][1 << 13];
+
+int Max(int a, int b){ return a > b ? a : b;}
+
 void Input(){
     g_grade.resize(GRADE);
 
@@ -41,11 +53,14 @@ void Input(){
 
         for(int j = 0; j < g_size; j++){
             scanf(" %c", &g_data[i][j]);
+            tb[i][j] = (g_data[i][j] == 'F' ? 3 : g_data[i][j] - 'A');
             g_used[i][j] = false;
         }
     }
 
     fclose(stdin);
+
+    memset(m, -1, sizeof(m));
 }
 
 void Output(){
@@ -53,8 +68,6 @@ void Output(){
     printf("%d", g_max);
     fclose(stdout);
 }
-
-int Max(int a, int b){ return a > b ? a : b;}
 
 int Trans(char ch){
     switch(ch){
@@ -84,7 +97,7 @@ void Print(int num){
     printf("\n");
 }
 
-int f(int a, int b){
+int Solve(int a, int b){
     int ans = 0;
     //Print(ans);
 
@@ -93,7 +106,7 @@ int f(int a, int b){
     }
 
     if(b == g_size){
-        return f(a + 1, 0);
+        return Solve(a + 1, 0);
     }
 
     if(g_used[a][b] == 0){
@@ -101,30 +114,56 @@ int f(int a, int b){
 
         if(b + 1 < g_size && g_used[a][b + 1] == 0){
             g_used[a][b + 1] = 1;
-            ans = Max(ans, f(a, b + 1) + g_grade[Trans(g_data[a][b])][Trans(g_data[a][b + 1])]);
+            ans = Max(ans, Solve(a, b + 1) + g_grade[Trans(g_data[a][b])][Trans(g_data[a][b + 1])]);
             g_used[a][b + 1] = 0;
         }
 
         if(a + 1 < g_size && g_used[a + 1][b] == 0){
             g_used[a + 1][b] = 1;
-            ans = Max(ans, f(a, b + 1) + g_grade[Trans(g_data[a][b])][Trans(g_data[a + 1][b])]);
+            ans = Max(ans, Solve(a, b + 1) + g_grade[Trans(g_data[a][b])][Trans(g_data[a + 1][b])]);
             g_used[a + 1][b] = 0;
         }
 
-        ans = Max(ans, f(a, b + 1));
+        ans = Max(ans, Solve(a, b + 1));
         g_used[a][b] = 0;
     }else{
-        ans = Max(ans, f(a, b + 1));
+        ans = Max(ans, Solve(a, b + 1));
     }
 
     //Print(ans);
     return ans;
 }
 
+int f(int x, int y, int s){
+    if(x == n){
+        return 0;
+    }
+
+    if(y == n){
+        return f(x + 1, 0, s);
+    }
+
+    if(!m[x][y][s]){
+        if(!(s&cu)){
+            if(y + 1 < n && !(s & rt)){
+                m[x][y][s] = Max(m[x][y][s], f(x, y + 2, (s << 2) % M) + p[tb[x][y]][tb[x][y+1]]);
+            }
+            if(x + 1 < n && !(s & dn)){
+                m[x][y][s] = Max(m[x][y][s], f(x, y + 1, ((s|dn) << 1) % M) + p[tb[x][y]][tb[x+1][y]]);
+            }
+            m[x][y][s] = Max(m[x][y][s], f(x, y + 1, (s << 1) % M));
+        }else{
+            m[x][y][s] = Max(m[x][y][s], f(x, y + 1, (s << 1) % M));
+        }
+    }
+    return m[x][y][s];
+}
+
 int main()
 {
     Input();
-    g_max = f(0, 0);
+    printf("%d\n", f(0, 0, 0));
+    g_max = Solve(0, 0);
     Output();
     return 0;
 }
