@@ -15,13 +15,19 @@ void Input(){
     freopen("input.txt", "r", stdin);
     scanf("%d %d", &g_size, &g_via);
 
-    g_data.resize(g_size);
-    g_visit.resize(g_size);
+    g_data.resize(g_size + 2);
+    g_visit.resize(g_size + 2);
+
+    g_data[0].resize(ROWCOL);
+    g_data[0][0] = g_data[0][1] = 0;
 
     for(int i = 0; i < g_size; i++){
-        g_data[i].resize(ROWCOL);
+        g_data[i + 1].resize(ROWCOL);
         scanf("%d %d", &g_data[i][0], &g_data[i][1]);
     }
+
+    g_data[g_size + 1].resize(ROWCOL);
+    g_data[g_size + 1][0] = g_data[g_size + 1][1] = 10000;
 
     fclose(stdin);
 }
@@ -41,24 +47,12 @@ int Abs(int num){
     return num < 0 ? -num : num;
 }
 
-int Count(){
-    int cnt = 0;
-
-    for(int i = 0; i < g_size; i++){
-        if(g_visit[i] == 1){
-            cnt++;
-        }
-    }
-
-    return cnt;
-}
-
-void Solve(int x, int y, int gas){
+void Solve(int index, int cnt, int gas){
     int dis_x, dis_y, m_gas;
 
-    if(Count() == g_via){
-        dis_x = Abs(10000 - x);
-        dis_y = Abs(10000 - y);
+    if(cnt == g_via){
+        dis_x = Abs(g_data[g_size + 1][0] - g_data[index][0]);
+        dis_y = Abs(g_data[g_size + 1][1] - g_data[index][1]);
         m_gas = Gas(dis_x, dis_y);
 
         if(gas < m_gas){
@@ -71,10 +65,10 @@ void Solve(int x, int y, int gas){
         return;
     }
 
-    for(int i = 0; i < g_size; i++){
+    for(int i = 1; i < g_size + 1; i++){
         if(g_visit[i] == 0){
-            dis_x = Abs(g_data[i][0] - x);
-            dis_y = Abs(g_data[i][1] - y);
+            dis_x = Abs(g_data[i][0] - g_data[index][0]);
+            dis_y = Abs(g_data[i][1] - g_data[index][1]);
             m_gas = Gas(dis_x, dis_y);
 
             if(m_gas < gas){
@@ -82,7 +76,7 @@ void Solve(int x, int y, int gas){
             }
 
             g_visit[i] = 1;
-            Solve(g_data[i][0], g_data[i][1], m_gas);
+            Solve(i, cnt + 1, m_gas);
             g_visit[i] = 0;
         }
     }
