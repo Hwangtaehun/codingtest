@@ -48,8 +48,10 @@ int main()
     int m_cnt;
 
     Input();
+
     sort(g_data.begin(), g_data.end());
     Print();
+
     for(int i = 0; i < g_size; i++){
         m_cnt = Solve(i);
         if(g_remove < m_cnt){
