@@ -1,9 +1,9 @@
+#include <functional>
 #include <cstdio>
-#include <vector>
 #include <set>
 
 using namespace std;
-set<int> g_data;
+set<int, greater<int>> g_data;
 
 void Input(){
     freopen("input.txt", "r", stdin);
@@ -15,19 +15,12 @@ void Input(){
 }
 
 void Output(){
-    vector<int> m_data;
-
-    for(int i: g_data){
-        m_data.push_back(i);
-    }
-
     freopen("output.txt", "w", stdout);
     printf("[");
-    for(int i = m_data.size() - 1; i >= 0; i--){
-        if(i == 0){
-            printf("%d", m_data[i]);
-        }else{
-            printf("%d, ", m_data[i]);
+    for (auto it = g_data.begin(); it != g_data.end(); ++it){
+        printf("%d", *it);
+        if(next(it) != g_data.end()){
+            printf(", ");
         }
     }
     printf("]");
