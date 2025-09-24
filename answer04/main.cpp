@@ -32,54 +32,29 @@ void Output(){
     fclose(stdout);
 }
 
-void Same(int a, int b, int c){
-    if((a == b) && (b == c)){
-        g_result.push_back(1);
-        g_result.push_back(2);
-        g_result.push_back(3);
-    }else{
-        if(a == b){
-            g_result.push_back(1);
-            g_result.push_back(2);
-        }
-
-        if(a == c){
-            g_result.push_back(1);
-            g_result.push_back(3);
-        }
-
-        if(b == c){
-            g_result.push_back(2);
-            g_result.push_back(3);
-        }
-    }
-}
-
 void Solve(){
-    int f_cnt = 0, s_cnt = 0, t_cnt = 0;
+    vector<int> m_cnt(3);
 
     for(int i = 0; i < g_answer.size(); i++){
-        if(g_answer[i] == first[i]){
-            f_cnt++;
+        if(g_answer[i] == first[i % first.size()]){
+            m_cnt[0]++;
         }
 
-        if(g_answer[i] == second[i]){
-            s_cnt++;
+        if(g_answer[i] == second[i % second.size()]){
+            m_cnt[1]++;
         }
 
-        if(g_answer[i] == thrid[i]){
-            t_cnt++;
+        if(g_answer[i] == thrid[i % thrid.size()]){
+            m_cnt[2]++;
         }
     }
 
-    if((f_cnt > s_cnt) && (f_cnt > t_cnt)){
-        g_result.push_back(1);
-    }else if((s_cnt > f_cnt) && (s_cnt > t_cnt)){
-        g_result.push_back(2);
-    }else if((t_cnt > f_cnt) && (t_cnt > s_cnt)){
-        g_result.push_back(3);
-    }else{
-        Same(f_cnt, s_cnt, t_cnt);
+    int m_max = *max_element(m_cnt.begin(), m_cnt.end());
+
+    for(int i = 0; i < 3; i++){
+        if(m_cnt[i] == m_max){
+            g_result.push_back(i + 1);
+        }
     }
 }
 
