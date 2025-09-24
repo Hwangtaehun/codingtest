@@ -63,21 +63,8 @@ void Output(){
     fclose(stdout);
 }
 
-void Print(){
-    for(int i = 0; i < result.size(); i++){
-        for(int j = 0; j < result[i].size(); j++){
-            printf("%d ", result[i][j]);
-        }
-        printf("\n");
-    }
-    printf("------------------\n");
-}
-
 void Solve(){
-    result.resize(arr1.size());
-    for(int i = 0; i < result.size(); i++){
-        result[i].resize(arr2[0].size());
-    }
+    result.assign(arr1.size(), vector<int>(arr2[0].size(), 0));
 
     for(int i = 0; i < arr1.size(); i++){
         for(int k =0; k < arr2[0].size(); k++){
