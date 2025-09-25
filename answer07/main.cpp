@@ -65,8 +65,8 @@ void Solve(){
             pair<int, int> s_pos = {x, y};
             pair<int, int> g_pos = {x + m_move.first, y + m_move.second};
 
-            if (current_pos > next_pos) {
-                swap(current_pos, next_pos);
+            if (s_pos > g_pos) {
+                swap(s_pos, g_pos);
             }
 
             m_route.insert({s_pos.first, s_pos.second, g_pos.first, g_pos.second});
