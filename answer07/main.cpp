@@ -62,7 +62,15 @@ void Solve(){
     for(int i = 0; i < g_data.size(); i++){
         pair<int, int> m_move = Trans(g_data[i]);
         if(Check(x + m_move.first, y + m_move.second)){
-            m_route.insert({x, y, x + m_move.first, y + m_move.second});
+            pair<int, int> s_pos = {x, y};
+            pair<int, int> g_pos = {x + m_move.first, y + m_move.second};
+
+            if (current_pos > next_pos) {
+                swap(current_pos, next_pos);
+            }
+
+            m_route.insert({s_pos.first, s_pos.second, g_pos.first, g_pos.second});
+
             x += m_move.first;
             y += m_move.second;
         }
