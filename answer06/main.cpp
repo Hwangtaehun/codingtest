@@ -15,8 +15,8 @@ void Input(){
 
     freopen("input.txt", "r", stdin);
     scanf("%d", &g_stage);
-    int c = getchar();            // 개행(\n) 먹기
-    fgets(m_char, sizeof(m_char), stdin); // 두 번째 줄 읽기
+    int c = getchar();
+    fgets(m_char, sizeof(m_char), stdin);
 
     char *p = m_char;
     int val;
@@ -41,7 +41,7 @@ void Output(){
     fclose(stdout);
 }
 
-bool Compare(const pair<int, double> &i, const pair<int, double> &j){ // 이부분 주의
+bool Compare(const pair<int, double> &i, const pair<int, double> &j){
     if(i.second == j.second)
         return i.first < j.first;
     return i.second > j.second;
