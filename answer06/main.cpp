@@ -64,10 +64,6 @@ void Solve(){
     }
 
     sort(g_result.begin(), g_result.end(), Compare);
-
-    for(int i = 0; i < g_result.size(); i++){
-        printf("%d - %f\n", g_result[i].first, g_result[i].second);
-    }
 }
 
 int main()
