@@ -1,6 +1,8 @@
 #include <algorithm>
 #include <cstdio>
 #include <vector>
+#include <tuple>
+#include <set>
 
 using namespace std;
 
@@ -53,37 +55,20 @@ bool Check(int x, int y){
     return false;
 }
 
-bool Compare(const pair<int, int> &i, const pair<int, int> &j){
-    if(i.first == j.first){
-        return i.second < j.second;
-    }
-
-    return i.first < j.first;
-}
-
 void Solve(){
-    vector< pair <int, int> > m_route;
+    set<tuple <int, int, int, int> > m_route;
     int x = 0, y = 0;
 
     for(int i = 0; i < g_data.size(); i++){
         pair<int, int> m_move = Trans(g_data[i]);
         if(Check(x + m_move.first, y + m_move.second)){
+            m_route.insert({x, y, x + m_move.first, y + m_move.second});
             x += m_move.first;
             y += m_move.second;
-            m_route.push_back({x, y});
         }
     }
 
-    int before = m_route.size();
-
-    sort(m_route.begin(), m_route.end(), Compare);
-    m_route.erase(unique(m_route.begin(), m_route.end()), m_route.end());
-
     g_result = m_route.size();
-
-    if(m_route.size() != before){
-        g_result += 1;
-    }
 }
 
 int main()
