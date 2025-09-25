@@ -74,11 +74,16 @@ void Solve(){
         }
     }
 
+    int before = m_route.size();
 
     sort(m_route.begin(), m_route.end(), Compare);
     m_route.erase(unique(m_route.begin(), m_route.end()), m_route.end());
 
     g_result = m_route.size();
+
+    if(m_route.size() != before){
+        g_result += 1;
+    }
 }
 
 int main()
