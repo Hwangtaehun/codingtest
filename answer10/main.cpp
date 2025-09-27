@@ -29,23 +29,24 @@ void Check(vector<char> m_data){
         if(c == '(' || c == '{' || c == '['){
             m_stack.push(c);
         }else{
-            if(!m_stack.empty()){
-                if(c == ')'){
-                    if(m_stack.top() == '('){
-                        m_stack.pop();
-                    }
-                }else if(c == '}'){
-                    if(m_stack.top() == '{'){
-                        m_stack.pop();
-                    }
-                }else if(c == ']'){
-                    if(m_stack.top() == '['){
-                        m_stack.pop();
-                    }
-                }
-            }else{
+            if(m_stack.empty()){
                 return;
             }
+
+            if(c == ')'){
+                if(m_stack.top() == '('){
+                    m_stack.pop();
+                }
+            }else if(c == '}'){
+                if(m_stack.top() == '{'){
+                    m_stack.pop();
+                }
+            }else if(c == ']'){
+                if(m_stack.top() == '['){
+                    m_stack.pop();
+                }
+            }
+
         }
     }
 
