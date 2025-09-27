@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdio>
-#include <vector>
 #include <string>
+#include <stack>
 
 using namespace std;
 
@@ -21,26 +21,16 @@ void Output(){
 }
 
 void Solve(){
-    vector<char> data(s.begin(), s.end());
-    while(!data.empty()){
-        bool duple = false;
-        for(int i = 0; i < data.size(); i++){
-            if(i != data.size() - 1){
-                if(data[i] == data[i + 1]){
-                    duple = true;
-                    data.erase(data.begin() + i, data.begin() + i + 2);
-                    break;
-                }
-            }
-        }
+    stack<char> st;
 
-        if(!duple){
-            result = 0;
-            return;
-        }
+    for(int i = 0; i < s.size(); i++){
+        if(st.empty() || st.top() != s[i])
+            st.push(s[i]);
+        else
+            st.pop();
     }
 
-    result = 1;
+    result = st.empty();
 }
 
 int main()
