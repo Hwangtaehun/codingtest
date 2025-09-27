@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <string>
 #include <vector>
+#include <stack>
 
 using namespace std;
 
@@ -36,22 +37,40 @@ void Solve(){
         if(g_data[i] == '('){
             m_index.push_back(i);
         }else{
-            if(m_index.size() != 0){
-                m_index.pop_back();
-            }else{
+            if(m_index.empty()){
                 return;
+            }
+            m_index.pop_back();
+        }
+    }
+
+    if(m_index.empty()){
+        g_result = true;
+    }
+}
+
+bool Solution(){
+    stack<char> stack;
+
+    for(char c: g_data){
+        if(c == '('){
+            stack.push(c);
+        }else if(c == ')'){
+            if(stack.empty()){
+                return false;
+            } else {
+                stack.pop();
             }
         }
     }
 
-    if(m_index.size() == 0){
-        g_result = true;
-    }
+    return stack.empty();
 }
 
 int main()
 {
     Input();
+    printf("%d", Solution());
     Solve();
     Output();
     return 0;
