@@ -48,31 +48,21 @@ void Print(stack<int> m_index){
 }
 
 void Solve(){
-    stack<int> m_index, m_price;
+    stack<int> s_index;
+    int priceNum = prices.size();
 
-    for(int i = 0; i < prices.size(); i++){
-        int m_time = 0;
-
-        if(!m_price.empty()){
-            while(m_price.top() > prices[i]){
-                m_time = i - m_index.top();
-                m_index.pop();
-                m_price.pop();
-            }
+    for(int i = 0; i < priceNum; i++){
+        while(!s_index.empty() && prices[s_index.top()] > prices[i]){
+            answer[s_index.top()] = i - s_index.top();
+            s_index.pop();
         }
 
-        if(m_time != 0){
-            answer[i - 1] = m_time;
-        }
-
-        m_index.push(i);
-        m_price.push(prices[i]);
+        s_index.push(i);
     }
 
-    while(!m_index.empty()){
-        int m_num = m_index.top();
-        answer[m_num] = prices.size() - m_num - 1;
-        m_index.pop();
+    while(!s_index.empty()) {
+        answer[s_index.top()] = priceNum - s_index.top() - 1;
+        s_index.pop();
     }
 }
 
