@@ -101,8 +101,8 @@ void Stack_print(stack<int> s){
 void Solve(){
     stack<int> s_bring;
 
-    for(int i = 0; i < moves.size(); i++){
-        int m_pos = moves[i] - 1;
+    for(int i: moves){
+        int m_pos = i - 1;
         for(int j = 0; j < board.size(); j++){
             if(board[j][m_pos] != 0){
                 int m_item = board[j][m_pos];
