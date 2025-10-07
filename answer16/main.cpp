@@ -5,11 +5,10 @@
 #include <cstdio>
 #include <cmath>
 #include <vector>
-#include <queue>
 
 using namespace std;
 
-vector<int> progresses, speeds, g_result;
+vector<int> progresses, speeds, answer;
 
 void Input(){
     string line;
@@ -50,47 +49,34 @@ void Input(){
 
 void Output(){
     freopen("output.txt", "w", stdout);
-    for(int i = 0; i < g_result.size(); i++){
-        printf("%d ", g_result[i]);
+    for(int i = 0; i < answer.size(); i++){
+        printf("%d ", answer[i]);
     }
     fclose(stdout);
 }
 
 void Solve(){
-    int m_fin = 0;
-    queue<int> q_pro;
+    int cnt = 0;
+    int max_day;
+    vector<int> days_left(speeds.size());
 
-    for(int i = 0; i < progresses.size(); i++){
-        q_pro.push(progresses[i]);
+    for(int i = 0; i < days_left.size(); i++){
+        days_left[i] = ceil((100.0 - progresses[i]) / speeds[i]);
     }
 
-    while(!q_pro.empty()){
-        int m_day = ceil((100 - q_pro.front()) / speeds[m_fin]);
-        printf("m_day = %d\n", m_day);
+    max_day = days_left[0];
 
-        for(int i = m_fin; i < speeds.size(); i++){
-            int num = q_pro.front() + (speeds[i] * m_day);
-            q_pro.pop();
-            q_pro.push(num);
-            printf("%d ", num);
-        }
-        printf("\n");
-
-        if(q_pro.front() >= 100){
-            int cnt = 0;
-            for(int i = m_fin; i < speeds.size(); i++){
-                if(q_pro.front() >= 100){
-                    cnt++;
-                    q_pro.pop();
-                }else{
-                    m_fin = i;
-                    break;
-                }
-            }
-
-            g_result.push_back(cnt);
+    for(int i = 0; i < days_left.size(); i++){
+        if(days_left[i] <= max_day){
+            cnt++;
+        }else{
+            answer.push_back(cnt);
+            cnt = 1;
+            max_day = days_left[i];
         }
     }
+
+    answer.push_back(cnt);
 }
 
 int main()
