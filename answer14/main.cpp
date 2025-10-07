@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <fstream>
 #include <sstream>
 #include <cstdio>
 #include <string>
@@ -11,7 +10,7 @@ using namespace std;
 
 int n, k;
 vector<string> cmd;
-vector<char> g_result;
+string answer;
 
 void Input(){
     freopen("input.txt", "r", stdin);
@@ -37,89 +36,64 @@ void Input(){
         if (!token.empty())
             cmd.push_back(token);
     }
-
-    g_result.resize(n); for(int i = 0; i < g_result.size(); i++){ g_result[i] = 'O'; }
 }
 
 void Output(){
-    //string answer;
-    //answer.assign(g_result.begin(), g_result.end());
 
     freopen("output.txt", "w", stdout);
-    for(int i = 0; i < g_result.size(); i++){
-        printf("%c", g_result[i]);
-    }
+    cout << answer;
     fclose(stdout);
 }
 
-void Print_result(){
-    for(int i = 0; i < g_result.size(); i++){
-        printf("%d = %c\n", i, g_result[i]);
-    }
-    printf("\n");
-}
-
-int Check(string str){
-    if(str.compare("C") == 0 || str.compare("Z") == 0){
-        return 0;
-    } else {
-        int num;
-        if(str[0] == 'D'){
-            num = str[2] - '0';
-            return num;
-        }else{
-            num = str[2] - '0';
-            return -num;
-        }
-    }
-}
-
-int Move(int num, int cur){
-    int cnt = 0;
-    bool plu = true;
-
-    if(num < 0){
-        plu = false;
-        num = abs(num);
-    }
-
-    while(true){
-        if(plu){
-            cur++;
-        }else{
-            cur--;
-        }
-
-        if(g_result[cur] == 'O'){
-            cnt++;
-        }
-
-        if(cnt == num){
-            break;
-        }
-    }
-
-    return cur;
-}
-
 void Solve(){
-    int m_cur = k;
-    stack<int> restore;
+    stack<int> deleted;
+    vector<int> up;
+    vector<int> down;
+
+    for(int i = 0; i < n + 2; i++){
+        up.push_back(i - 1);
+        down.push_back(i + 1);
+    }
+
+    k++;
 
     for(int i = 0; i < cmd.size(); i++){
-        string str = cmd[i];
-        if(Check(str) == 0){
-            if(str.compare("C") == 0) {
-                restore.push(m_cur);
-                g_result[m_cur] = 'X';
-            } else {
-                g_result[restore.top()] = 'O';
-                restore.pop();
-            }
-        } else {
-            m_cur = Move(Check(str), m_cur);
+        if(cmd[i][0] == 'C') {
+            deleted.push(k);
+            down[up[k]] = down[k];
+            up[down[k]] = up[k];
+
+            if(down[k] == n + 1)
+                k = up[k];
+            else
+                k = down[k];
         }
-        //Print_result();
+        else if(cmd[i][0] == 'Z') {
+            int r = deleted.top();
+            down[up[r]] = r;
+            up[down[r]] = r;
+            deleted.pop();
+        }
+        else {
+            int sz = stoi(cmd[i].substr(2));
+
+            if(cmd[i][0] == 'U') {
+                for(int j = 0; j < sz; j++){
+                    k =  up[k];
+                }
+            }else if(cmd[i][0] == 'D') {
+                for(int j = 0; j < sz; j++){
+                    k = down[k];
+                }
+            }
+        }
+    }
+
+    answer.append(n, 'O');
+
+    while(!deleted.empty()) {
+        answer[ deleted.top() - 1 ] = 'X';
+        deleted.pop();
     }
 }
 
