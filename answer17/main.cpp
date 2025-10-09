@@ -11,7 +11,7 @@ using namespace std;
 vector<string> cards1, cards2, goal;
 string answer;
 
-Print_Vector(const vector<string>& v_str){
+void Print_Vector(const vector<string>& v_str){
     for(int i = 0; i < v_str.size(); i++){
         cout << v_str[i] << " ";
     }
@@ -56,14 +56,55 @@ void Input(){
             }
         }
     }
+}
 
-    Print_Vector(cards1);
-    Print_Vector(cards2);
-    Print_Vector(goal);
+void Output(){
+    freopen("output.txt", "w", stdout);
+    cout << answer;
+    fclose(stdout);
+}
+
+bool Same(const vector<string> &v_str){
+    for(int i = 0; i < goal.size(); i++){
+        if(goal[i] != v_str[i]){
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void Solve(){
+    vector<string> m_r;
+    queue<string> q_c1;
+
+    for(int i = 0; i < cards1.size(); i++){
+        q_c1.push(cards1[i]);
+    }
+
+    m_r.push_back(q_c1.front());
+    q_c1.pop();
+
+    for(int i = 0; i < cards2.size(); i++){
+        m_r.push_back(cards2[i]);
+    }
+
+    while(!q_c1.empty()){
+        m_r.push_back(q_c1.front());
+        q_c1.pop();
+    }
+
+    if(Same(m_r)){
+        answer = "Yes";
+    }else{
+        answer = "No";
+    }
 }
 
 int main()
 {
     Input();
+    Solve();
+    Output();
     return 0;
 }
