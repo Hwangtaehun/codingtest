@@ -75,30 +75,36 @@ bool Same(const vector<string> &v_str){
 }
 
 void Solve(){
-    vector<string> m_r;
     queue<string> q_c1;
+    queue<string> q_c2;
+    queue<string> q_g;
 
     for(int i = 0; i < cards1.size(); i++){
         q_c1.push(cards1[i]);
     }
 
-    m_r.push_back(q_c1.front());
-    q_c1.pop();
-
     for(int i = 0; i < cards2.size(); i++){
-        m_r.push_back(cards2[i]);
+        q_c2.push(cards2[i]);
     }
 
-    while(!q_c1.empty()){
-        m_r.push_back(q_c1.front());
-        q_c1.pop();
+    for(int i = 0; i < goal.size(); i++){
+        q_g.push(goal[i]);
     }
 
-    if(Same(m_r)){
-        answer = "Yes";
-    }else{
-        answer = "No";
+
+    while(!q_g.empty()){
+        if(!q_c1.empty() && q_c1.front() == q_g.front()){
+            q_c1.pop();
+            q_g.pop();
+        }else if(!q_c2.empty() && q_c2.front() == q_g.front()){
+            q_c2.pop();
+            q_g.pop();
+        }else{
+            break;
+        }
     }
+
+    answer = q_g.empty() ? "Yes" : "No";
 }
 
 int main()
