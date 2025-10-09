@@ -11,6 +11,9 @@ vector<int> arr;
 string result;
 int target;
 
+//Ãß°¡
+#include <unordered_set>
+
 void Input(){
     string line;
     vector<string> lines;
@@ -47,10 +50,57 @@ void Solve(){
 
     for(int i = 0; i < arr.size(); i++){
         for(int j = i + 1; j < arr.size(); j++){
-            if((i + j) == target){
+            if((arr[i] + arr[j]) == target){
                 result = "true";
             }
         }
+    }
+}
+
+void mapping(vector<int> &m_hash, const vector<int> &arr, int target){
+    for(int i = 0; i < arr.size(); i++){
+        if(arr[i] > target){
+            continue;
+        }
+        m_hash[arr[i]] = 1;
+    }
+}
+
+void Solve1(){
+    vector<int> m_hash(target + 1, 0);
+    mapping(m_hash, arr, target);
+
+    for(int i = 0; i < arr.size(); i++){
+        int num = target - arr[i];
+
+        if(arr[i] == num){
+            continue;
+        }
+
+        if(num < 0){
+            continue;
+        }
+
+        if(m_hash[num]){
+            result = "true";
+            return;
+        }
+    }
+
+    result = "false";
+}
+
+void Solve2() {
+    unordered_set<int> seen;
+    result = "false";
+
+    for (int num : arr) {
+        int need = target - num;
+        if (seen.count(need)) {
+            result = "true";
+            return;
+        }
+        seen.insert(num);
     }
 }
 
@@ -63,7 +113,7 @@ void Output(){
 int main()
 {
     Input();
-    Solve();
+    Solve2();
     Output();
     return 0;
 }
