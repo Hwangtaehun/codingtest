@@ -94,13 +94,10 @@ void Solve(){
     result.resize(v_query.size());
 
     for(int i = 0; i < v_query.size(); i++){
-        result[i] = "false";
-
-        for(int j = 0; j < v_string.size(); j++){
-            if(v_query[i] == v_string[j]){
-                result[i] = "true";
-                break;
-            }
+        if(find(v_string.begin(), v_string.end(), v_query[i]) != v_string.end()){
+            result[i] = "true";
+        } else {
+            result[i] = "false";
         }
     }
 }
