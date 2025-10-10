@@ -10,6 +10,11 @@ using namespace std;
 vector<string> phoneBook;
 bool answer;
 
+//solve
+#include <unordered_map>
+
+unordered_map<string, int> g_phoneBook;
+
 void Input(){
     string line;
     vector<string> lines;
@@ -62,6 +67,34 @@ void Solve(){
             break;
         }
     }
+}
+
+bool isPrefix(const string& phoneNumber) {
+    string prefix = "";
+
+    for(char digit : phoneNumber) {
+        prefix += digit;
+
+        if (g_phoneBook.find(prefix) != g_phoneBook.end() && prefix != phoneNumber) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool solution(vector<string> phoneNumbers) {
+    for(const string& phoneNumber : phoneNumbers) {
+        phoneBook[phoneNumber] = 1;
+    }
+
+    for(const string& phoneNumber : phoneNumbers) {
+        if(isPrefix(phoneNumber)){
+            return false;
+        }
+    }
+
+    return true;
 }
 
 int main()
