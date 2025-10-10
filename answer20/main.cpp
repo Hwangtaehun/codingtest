@@ -1,15 +1,16 @@
-#include <algorithm>
 #include <iostream>
 #include <sstream>
 #include <cstdio>
+#include <algorithm>
 #include <string>
 #include <vector>
 #include <cmath>
+#include <map>
 
 using namespace std;
 
 vector<string> participant, completion;
-string result;
+string answer;
 
 void Input(){
     string line;
@@ -49,48 +50,40 @@ void Input(){
 
 void Output(){
     freopen("output.txt", "w", stdout);
-    cout << result;
+    cout << answer;
     fclose(stdout);
 }
 
-int myPow(int n){
-    int num = 0;
-    double p = 31;
-
-    num = (int)pow(p, n);
-
-    return num;
-}
-
-vector<int> vector_hashing(const vector<string> v_str){
-    vector<int> v_int(v_str.size(), 0);
-    const int m = 1000000007;
+map<string, int> map_sort(const vector<string> v_str){
+    map<string, int> m_str;
 
     for(int i = 0; i < v_str.size(); i++){
-        int num = 0;
-        string str = v_str[i];
-        for(int j = 0; j < str.size(); j++){
-            num =+ (myPow(j) * str[j]) % m;
+        if(!m_str.empty() && m_str.find(v_str[i]) != m_str.end()){
+            m_str[v_str[i]] += 1;
+        }else{
+            m_str[v_str[i]] = 1;
         }
-
-        v_int[i] = num % m;
     }
 
-    return v_int;
+    return m_str;
 }
 
 void Solve(){
-    vector<int> v_part, v_com;
+    map<string, int> m_part;
 
-    v_part = vector_hashing(participant);
-    v_com = vector_hashing(completion);
+    m_part = map_sort(participant);
 
-    for(int i = 0; i < v_part.size(); i++){
-        if(find(v_com.begin(), v_com.end(), v_part[i]) == v_com.end()){
-            result = participant[i];
-            return;
+    for(int i = 0; i < completion.size(); i++){
+        if(m_part.find(completion[i]) != m_part.end()){
+            m_part[completion[i]] -= 1;
+
+            if(m_part[completion[i]] == 0){
+                m_part.erase(completion[i]);
+            }
         }
     }
+
+    answer = m_part.begin()->first;
 }
 
 int main()
