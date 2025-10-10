@@ -1,21 +1,24 @@
+#include <algorithm>
 #include <iostream>
 #include <sstream>
 #include <cstdio>
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include <algorithm>
 
 using namespace std;
 
-vector<string> participant, completion;
-string answer;
+int n;
+vector<string> words;
+vector<int> answer;
 
 void Input(){
     string line;
     vector<string> lines;
 
     freopen("input.txt", "r", stdin);
+
+    scanf("%d", &n);
 
     while (getline(cin, line)) {
         if (!line.empty()){
@@ -37,11 +40,7 @@ void Input(){
             token.erase(0, token.find_first_not_of(" \t\n\r"));
             token.erase(token.find_last_not_of(" \t\n\r") + 1);
             if (!token.empty()){
-                if(i == 0){
-                    participant.push_back(token);
-                } else {
-                    completion.push_back(token);
-                }
+                words.push_back(token);
             }
         }
     }
@@ -49,47 +48,43 @@ void Input(){
 
 void Output(){
     freopen("output.txt", "w", stdout);
-    cout << answer;
+    for(int i = 0; i < answer.size(); i++){
+        printf("%d ", answer[i]);
+    }
     fclose(stdout);
 }
 
-unordered_map<string, int> map_sort(const vector<string> v_str){
-    unordered_map<string, int> m_str;
-
-    for(int i = 0; i < v_str.size(); i++){
-        m_str[v_str[i]] += 1;
-    }
-
-    return m_str;
-}
-
 void Solve(){
-    unordered_map<string, int> m_part = map_sort(participant);
+    unordered_map <string, int> m_word;
 
-    for(int i = 0; i < completion.size(); i++){
-        if(m_part.find(completion[i]) != m_part.end()){
-            m_part[completion[i]] -= 1;
+    for(int i = 0; i < words.size(); i++){
+        m_word[words[i]]++;
 
-            if(m_part[completion[i]] == 0){
-                m_part.erase(completion[i]);
+        if(i != 0){
+            int person = (i % n) + 1;
+            int stap = (int)(i / n) + 1;
+
+            if(m_word[words[i]] != 1){
+                answer.push_back(person);
+                answer.push_back(stap);
+                break;
+            }
+
+            string bef = words[i - 1];
+            string cur = words[i];
+
+            if(bef[bef.length() - 1] != cur[0]){
+                answer.push_back(person);
+                answer.push_back(stap);
+                break;
             }
         }
     }
 
-    answer = m_part.begin()->first;
-}
-
-string Solve1(){
-    sort(participant.begin(), participant.end());
-    sort(completion.begin(), completion.end());
-
-    for(int i = 0; i < completion.size(); i++){
-        if(participant[i] != completion[i]){
-            return participant[i];
-        }
+    if(answer.empty()){
+        answer.push_back(0);
+        answer.push_back(0);
     }
-
-    return participant[participant.size() - 1];
 }
 
 int main()
