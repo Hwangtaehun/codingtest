@@ -56,7 +56,7 @@ void Solve(){
     answer = true;
     sort(phoneBook.begin(), phoneBook.end());
 
-    for(int i = 0; i < phoneBook.size(); i++){
+    for(int i = 0; i < phoneBook.size() - 1; i++){
         if(phoneBook[i] == phoneBook[i + 1].substr(0, phoneBook[i].size())){
             answer = false;
             break;
