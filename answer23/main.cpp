@@ -58,6 +58,8 @@ void Output(){
     fclose(stdout);
 }
 
+#define ITEM_SIZE 10
+
 unordered_map<string, int> Mapping(const vector<string> m_want, const vector<int> m_num){
     unordered_map<string, int> m_map;
 
@@ -67,8 +69,6 @@ unordered_map<string, int> Mapping(const vector<string> m_want, const vector<int
 
     return m_map;
 }
-
-#define ITEM_SIZE 10
 
 void Solve(){
     int max_start = discount.size() - ITEM_SIZE;
@@ -92,10 +92,64 @@ void Solve(){
     }
 }
 
+int Solution(){
+    int m_answer = 0;
+    unordered_map<string, int> wantMap;
+
+    for(int i = 0; i < want.size(); i++){
+        wantMap[want[i]] = number[i];
+    }
+
+    for(int i = 0; i < discount.size() - 9; i++){
+        unordered_map<string, int> discount_10d;
+
+        for(int j = i; j < 10 + i; j++){
+            discount_10d[discount[j]]++;
+        }
+
+        if(wantMap == discount_10d){
+            m_answer++;
+        }
+    }
+
+    return m_answer;
+}
+
+int Solution2(){
+    int m_answer = 0;
+    unordered_map<string, int> wantMap;
+
+    for(int i = 0; i < want.size(); i++){
+        wantMap[want[i]] = number[i];
+    }
+
+    unordered_map<string, int> discount_set;
+
+    for(int i = 0; i < 9; i++){
+        discount_set[discount[i]]++;
+    }
+
+    for(int i = 9; i < discount.size(); i++){
+        discount_set[discount[i]]++;
+
+        if(wantMap == discount_set){
+            m_answer++;
+        }
+
+        if(--discount_set[discount[i - 9]] == 0){
+            discount_set.erase(discount[i - 9]);
+        }
+    }
+
+    return m_answer;
+}
+
 int main()
 {
     Input();
     Solve();
+    printf("%d\n", Solution());
+    printf("%d\n", Solution2());
     Output();
     return 0;
 }
