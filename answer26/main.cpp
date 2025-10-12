@@ -1,0 +1,129 @@
+#include <algorithm>
+#include <iostream>
+#include <sstream>
+#include <cstdio>
+#include <vector>
+#include <string>
+#include <set>
+#include <unordered_map>
+
+using namespace std;
+
+int k;
+vector<string> id_list, report;
+vector<int> answer;
+
+void Input(){
+    string line;
+    vector<string> lines;
+
+    freopen("input.txt", "r", stdin);
+
+    scanf("%d", &k);
+
+    while(getline(cin, line)){
+        if(!line.empty()) {
+            lines.push_back(line);
+        }
+    }
+
+    fclose(stdin);
+
+    for(int i = 0; i < lines.size(); i++){
+        lines[i].erase(remove(lines[i].begin(), lines[i].end(), '['), lines[i].end());
+        lines[i].erase(remove(lines[i].begin(), lines[i].end(), ']'), lines[i].end());
+        lines[i].erase(remove(lines[i].begin(), lines[i].end(), '\"'), lines[i].end());
+
+        stringstream ss(lines[i]);
+        string token;
+
+        while(getline(ss, token, ',')) {
+            token.erase(0, token.find_first_not_of(" \t\n\r"));
+            token.erase(token.find_last_not_of(" \t\n\r") + 1);
+
+            if(!token.empty()){
+                if(i == 0){
+                    id_list.push_back(token);
+                } else {
+                    report.push_back(token);
+                }
+            }
+        }
+    }
+}
+
+void Output(){
+    freopen("output.txt", "w", stdout);
+    for(int i = 0; i < answer.size(); i++){
+        printf("%d ", answer[i]);
+    }
+    fclose(stdout);
+}
+
+vector< pair <string, string> > Sort_report(const vector<string> report){
+    set<string> ndr;
+    vector< pair <string, string> > res_ret;
+
+    for(int i = 0; i < report.size(); i++){
+        ndr.insert(report[i]);
+    }
+
+    for(auto str : ndr){
+        stringstream ss(str);
+        string id, report_id;
+
+        ss >> id >> report_id;
+        res_ret.push_back({id, report_id});
+    }
+
+    return res_ret;
+}
+
+vector<string> Stop_id(vector< pair <string, string> > m_report, int k){
+    unordered_map<string, int> m_id;
+    vector<string> res;
+
+    for(int i = 0; i < m_report.size(); i++){
+        m_id[m_report[i].second]++;
+    }
+
+    for(auto value : m_id){
+        if(value.second >= k){
+            res.push_back(value.first);
+        }
+    }
+
+    return res;
+}
+
+void Solve(){
+    vector< pair <string, string> > m_report = Sort_report(report);
+    sort(m_report.begin(), m_report.end());
+
+    vector<string> m_stop_id = Stop_id(m_report, k);
+    answer.resize(id_list.size());
+
+    for(int i = 0; i < id_list.size(); i++){
+        int cnt = 0;
+        string send = id_list[i];
+
+        for(int j = 0; j < m_report.size(); j++){
+            if(m_report[j].first == send){
+                for(int l = 0; l < m_stop_id.size(); l++){
+                    if(m_report[j].second == m_stop_id[l]){
+                        cnt++;
+                    }
+                }
+            }
+        }
+        answer[i] = cnt;
+    }
+}
+
+int main()
+{
+    Input();
+    Solve();
+    Output();
+    return 0;
+}
