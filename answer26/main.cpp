@@ -98,9 +98,9 @@ vector<string> Stop_id(vector< pair <string, string> > m_report, int k){
 
 void Solve(){
     vector< pair <string, string> > m_report = Sort_report(report);
-    sort(m_report.begin(), m_report.end());
-
     vector<string> m_stop_id = Stop_id(m_report, k);
+
+    sort(m_report.begin(), m_report.end());
     answer.resize(id_list.size());
 
     for(int i = 0; i < id_list.size(); i++){
