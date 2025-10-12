@@ -99,24 +99,25 @@ vector<string> Stop_id(vector< pair <string, string> > m_report, int k){
 void Solve(){
     vector< pair <string, string> > m_report = Sort_report(report);
     vector<string> m_stop_id = Stop_id(m_report, k);
+    unordered_map<string, int> mail_count;
 
     sort(m_report.begin(), m_report.end());
     answer.resize(id_list.size());
 
-    for(int i = 0; i < id_list.size(); i++){
-        int cnt = 0;
-        string send = id_list[i];
-
-        for(int j = 0; j < m_report.size(); j++){
-            if(m_report[j].first == send){
-                for(int l = 0; l < m_stop_id.size(); l++){
-                    if(m_report[j].second == m_stop_id[l]){
-                        cnt++;
-                    }
-                }
+    for(int i = 0; i < m_report.size(); i++){
+        for(int j = 0; j < m_stop_id.size(); j++){
+            if(m_stop_id[j] == m_report[i].second){
+                mail_count[m_report[i].first]++;
             }
         }
-        answer[i] = cnt;
+    }
+
+    for(int i = 0; i < id_list.size(); i++){
+        for(auto a: mail_count){
+            if(id_list[i] == a.first){
+                answer[i] = a.second;
+            }
+        }
     }
 }
 
