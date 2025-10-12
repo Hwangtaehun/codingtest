@@ -4,13 +4,13 @@
 #include <cstdio>
 #include <vector>
 #include <string>
-#include <utility>
 #include <unordered_map>
+#define SIZE 2
 
 using namespace std;
 
 vector<string> genres;
-vector<int> plays, result;
+vector<int> plays, answer;
 
 void Input(){
     string line;
@@ -52,18 +52,20 @@ void Input(){
 
 void Output(){
     freopen("output.txt", "w", stdout);
-    for(int i = 0; i < result.size(); i++){
-        printf("%d ", result[i]);
+    for(int i = 0; i < answer.size(); i++){
+        printf("%d ", answer[i]);
     }
     fclose(stdout);
 }
-
-#define SIZE 2
 
 bool Compare_pair(const pair<int, int> &a, const pair<int, int> &b){
     if(a.second == b.second){
         return a.first < b.first;
     }
+    return a.second > b.second;
+}
+
+bool Compare_second(const pair<string, int>  &a, const pair<string, int> &b) {
     return a.second > b.second;
 }
 
@@ -76,25 +78,17 @@ vector< pair<string, int> > Genres_sort(vector<string> genres, vector<int> plays
     }
 
     for(auto a: m_gen){
-        printf("%s ", a.first);
         v_gen.push_back({a.first, a.second});
     }
-    printf("\n");
 
-    sort(v_gen.begin(), v_gen.end(), [](const auto &a, const auto &b) {
-        return a.second > b.second;
-    });
-
-    for(int i = 0; i < v_gen.size(); i++){
-        printf("%d - %d\n", v_gen[i].first, v_gen[i].second);
-    }
+    sort(v_gen.begin(), v_gen.end(), Compare_second);
 
     return v_gen;
 }
 
 void Solve(){
     vector< pair<int, int> > sort_plays;
-    vector< pair<string, int> >gen_cnt = Genres_sort(genres, play);
+    vector< pair<string, int> >gen_cnt = Genres_sort(genres, plays);
 
     for(int i = 0; i < plays.size(); i++){
         sort_plays.push_back({i, plays[i]});
@@ -102,8 +96,20 @@ void Solve(){
 
     sort(sort_plays.begin(), sort_plays.end(), Compare_pair);
 
-    for(int i = 0; i < sort_plays.size(); i++){
-        printf("%d - %d\n", sort_plays[i].first, sort_plays[i].second);
+    for(int i = 0; i < gen_cnt.size(); i++){
+        string geners_name = gen_cnt[i].first;
+        int cnt = 0;
+
+        for(int j = 0; j < sort_plays.size(); j++){
+            if(geners_name == genres[sort_plays[j].first]){
+                answer.push_back(sort_plays[j].first);
+                cnt++;
+            }
+
+            if(cnt == 2){
+                break;
+            }
+        }
     }
 }
 
@@ -111,6 +117,6 @@ int main()
 {
     Input();
     Solve();
-    //Output();
+    Output();
     return 0;
 }
