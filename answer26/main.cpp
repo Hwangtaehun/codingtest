@@ -6,6 +6,7 @@
 #include <string>
 #include <set>
 #include <unordered_map>
+#include <unordered_set>
 
 using namespace std;
 
@@ -121,10 +122,40 @@ void Solve(){
     }
 }
 
+vector<int> solution(){
+    vector<int> Answer;
+    unordered_map<string, unordered_set<string> > reported_user;
+    unordered_map<string, int> count;
+
+    for(string &r: report) {
+        stringstream ss(r);
+        string user_id, reported_id;
+        ss >> user_id >> reported_id;
+        reported_user[reported_id].insert(user_id);
+    }
+
+    for(auto &[reported_id, user_id_lst]: reported_user) {
+        if(user_id_lst.size() >= k){
+            for(const string &uid : user_id_lst) {
+                count[uid]++;
+            }
+        }
+    }
+
+    for(string &id : id_list){
+        Answer.push_back(count[id]);
+    }
+
+    return Answer;
+}
+
 int main()
 {
     Input();
     Solve();
+    for(auto m : solution()){
+        printf("%d ", m);
+    }
     Output();
     return 0;
 }
