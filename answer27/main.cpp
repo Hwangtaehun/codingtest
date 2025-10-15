@@ -1,10 +1,10 @@
 #include <iostream>
-#include <sstream>
 #include <cstdio>
 #include <string>
 #include <vector>
+#include <sstream>
 #include <algorithm>
-#include <unordered_map>
+#include <map>
 
 using namespace std;
 
@@ -94,9 +94,9 @@ vector<string> string_to_vector(string str){
 }
 
 string possible(vector<string> combinat){
-    unordered_map<string, int> m_unmap;
+    map<string, int> m_map;
     string result = "";
-    int m_max = 0;
+    int m_max = 2;
 
     for(int i = 0; i < combinat.size(); i++){
         for(int j = i + 1; j < combinat.size(); j++){
@@ -106,7 +106,7 @@ string possible(vector<string> combinat){
             for(int m = 0; m < order1.size(); m++){
                 for(int n = 0; n < order2.size(); n++){
                     if(order1[m] == order2[n]){
-                        m_unmap[order1[m]]++;
+                        m_map[order1[m]]++;
                         string str = order1[m] + ",";
                         result += str;
                     }
@@ -115,7 +115,7 @@ string possible(vector<string> combinat){
         }
     }
 
-    for(auto a: m_unmap){
+    for(auto a: m_map){
         if(m_max < a.second){
             m_max = a.second;
             result = a.first + ",";
@@ -150,10 +150,58 @@ void Solve(){
     sort(answer.begin(), answer.end());
 }
 
+//solve
+map<string, int> combi;
+
+void combination(string src, string dst, int depth){
+    if(dst.size() == depth){
+        combi[dst]++;
+    }else{
+        for(int i = 0; i < src.size(); i++){
+            combination(src.substr(i + 1), dst + src[i], depth);
+        }
+    }
+}
+
+vector<string> solution(vector<string> orders, vector<int> course){
+    vector<string> m_answer;
+
+    for (string &order : orders) {
+        sort(order.begin(), order.end());
+    }
+
+    for (int len : course) {
+        for(string order : orders) {
+            combination(order, "", len);
+
+        }
+
+        int maxOrder = 0;
+
+        for (auto it : combi) {
+            maxOrder = max(maxOrder, it.second);
+        }
+
+        for (auto it : combi) {
+            if (maxOrder >= 2 && it.second == maxOrder) {
+                m_answer.push_back(it.first);
+            }
+        }
+
+        combi.clear();
+    }
+
+    sort(m_answer.begin(), m_answer.end());
+    return m_answer;
+}
+
 int main()
 {
     Input();
     Solve();
+    for(auto vstr : solution(orders, course)){
+        cout << vstr << " ";
+    }
     Output();
     return 0;
 }
