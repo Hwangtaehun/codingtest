@@ -1,2 +1,2 @@
-["ABCFG","AC","CDE","ACDE","BCFG","ACDEH"]
+["XYZ","XWY","WXA"]
 [2,3,4]

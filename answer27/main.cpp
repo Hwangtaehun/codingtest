@@ -65,6 +65,7 @@ void Output(){
 
 void Combination_string(const string src, string cur, string &dst, int depth){
     if(cur.size() == depth){
+        sort(cur.begin(), cur.end());
         dst +=  cur + ",";
         return;
     }
@@ -137,7 +138,9 @@ void Solve(){
                 Combination_string(orders[j], "", m_result, course[i]);
                 v_com.push_back(m_result);
             }else if(orders[j].length() == course[i]){
-                v_com.push_back(orders[j]);
+                m_result = orders[j];
+                sort(m_result.begin(), m_result.end());
+                v_com.push_back(m_result);
             }
         }
         m_answer += possible(v_com);
