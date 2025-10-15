@@ -93,7 +93,9 @@ vector<string> string_to_vector(string str){
 }
 
 string possible(vector<string> combinat){
+    unordered_map<string, int> m_unmap;
     string result = "";
+    int m_max = 0;
 
     for(int i = 0; i < combinat.size(); i++){
         for(int j = i + 1; j < combinat.size(); j++){
@@ -103,12 +105,21 @@ string possible(vector<string> combinat){
             for(int m = 0; m < order1.size(); m++){
                 for(int n = 0; n < order2.size(); n++){
                     if(order1[m] == order2[n]){
+                        m_unmap[order1[m]]++;
                         string str = order1[m] + ",";
                         result += str;
                     }
                 }
             }
+        }
+    }
 
+    for(auto a: m_unmap){
+        if(m_max < a.second){
+            m_max = a.second;
+            result = a.first + ",";
+        }else if(m_max == a.second){
+            result += a.first + ",";
         }
     }
 
@@ -132,8 +143,8 @@ void Solve(){
         m_answer += possible(v_com);
     }
 
-
-    cout << m_answer << endl;
+    answer = string_to_vector(m_answer);
+    sort(answer.begin(), answer.end());
 }
 
 int main()
