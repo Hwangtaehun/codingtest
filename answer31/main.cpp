@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <string>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #define PRICE 100
 
 using namespace std;
@@ -87,18 +87,18 @@ void Map_print(const T& v) {
 }
 
 void Solve(){
-    map<string, int> chart_amount;
-    map<string, string> enroll_parent;
+    unordered_map<string, int> chart_amount;
+    unordered_map<string, string> enroll_parent;
 
     for(int i = 0; i < enroll.size(); i++) {
-        chart_amount[enroll[i]] = 0;
         enroll_parent[enroll[i]] = referral[i];
     }
 
     for(int i = 0; i < seller.size(); i++) {
         int total = amount[i]  * PRICE;
         string child = seller[i];
-        while(child != "-") {
+
+        while(total > 0 && child != "-") {
             string parent = enroll_parent[child];
             int interest = total * 0.1;
             chart_amount[child] += total - interest;
