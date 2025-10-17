@@ -18,11 +18,11 @@ void Output(){
 }
 
 void Solve(){
-    int m_a = A, m_b = B, num = 1;
+    int m_a = A, m_b = B, num = 0;
 
     while(m_a != m_b){
-        m_a /= 2;
-        m_b /= 2;
+        m_a = (m_a + 1) / 2;
+        m_b = (m_b + 1) / 2;
         num++;
     }
 
