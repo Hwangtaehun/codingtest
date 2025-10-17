@@ -104,6 +104,10 @@ void Solve(){
             chart_amount[child] += total - interest;
             total = interest;
             child = parent;
+
+            if(child.empty()){
+                break;
+            }
         }
     }
 
