@@ -1,4 +1,4 @@
 ["john","mary","edward","sam","emily","jaimie","tod","young"]
 ["-","-","mary","edward","mary","mary","jaimie","edward"]
-["young","jonh","tod","emily","mary"]
+["young","john","tod","emily","mary"]
 [12,4,2,5,10]

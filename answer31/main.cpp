@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <map>
+#define PRICE 100
 
 using namespace std;
 
@@ -76,12 +78,44 @@ void Vector_print(T v){
     cout << endl;
 }
 
+template <typename T>
+void Map_print(const T& v) {
+    for (auto a : v) {
+        cout << a.first << ": " << a.second << endl;
+    }
+    cout << endl;
+}
+
+void Solve(){
+    map<string, int> chart_amount;
+    map<string, string> enroll_parent;
+
+    for(int i = 0; i < enroll.size(); i++) {
+        chart_amount[enroll[i]] = 0;
+        enroll_parent[enroll[i]] = referral[i];
+    }
+
+    for(int i = 0; i < seller.size(); i++) {
+        int total = amount[i]  * PRICE;
+        string child = seller[i];
+        while(child != "-") {
+            string parent = enroll_parent[child];
+            int interest = total * 0.1;
+            chart_amount[child] += total - interest;
+            total = interest;
+            child = parent;
+        }
+    }
+
+    for(int i = 0; i < enroll.size(); i++){
+        answer.push_back(chart_amount[enroll[i]]);
+    }
+}
+
 int main()
 {
     Input();
-    Vector_print(enroll);
-    Vector_print(referral);
-    Vector_print(seller);
-    Vector_print(amount);
+    Solve();
+    Output();
     return 0;
 }
