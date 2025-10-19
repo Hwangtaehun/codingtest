@@ -66,13 +66,19 @@ void Output(){
     fclose(stdout);
 }
 
-void Store_print(){
-    for(int i = 0; i < operations.size(); i++){
-        for(int j = 0; j < operations[i].size(); j++){
-            cout << operations[i][j] << " ";
+void bool_Print(vector<bool> res){
+    for(int i = 0; i < res.size(); i++){
+        if(i != 0){
+            cout << ", ";
         }
-        cout << endl;
+
+        if(answer[i]){
+            cout << "true";
+        }else{
+            cout << "false";
+        }
     }
+    cout << endl;
 }
 
 int Find_element(const vector< set<int> > vs, int num1, int num2) {
@@ -131,10 +137,106 @@ void Solve(){
     }
 }
 
+//solve
+vector<int> parents;
+vector<int> rankData;
+
+int charToInt(char c) {
+    return c - '0';
+}
+
+int Find1(int x) {
+    if (parents[x] == x) {
+        return x;
+    }
+
+    parents[x] = Find1(parents[x]);
+
+    return parents[x];
+}
+
+int Find2(int x) {
+    if (parents[x] == x) {
+        return x;
+    }
+
+    return Find2(parents[x]);
+}
+
+void unionSet1(int x, int y) {
+    int root1 = Find1(x);
+    int root2 = Find1(y);
+
+    if(root1 != root2) {
+        if (rankData[root1] < rankData[root2]) {
+            parents[root1] = root2;
+        } else if (rankData[root1] > rankData[root2]) {
+            parents[root2] = root1;
+        } else {
+            parents[root2] = root1;
+            rankData[root1]++;
+        }
+    }
+}
+
+void unionSet2(int x, int y) {
+    int root1 = Find2(x);
+    int root2 = Find2(y);
+
+    if(root1 != root2) {
+        parents[root1] =  root2;
+    }
+}
+
+vector<bool> solution1(){
+    vector<bool> results;
+
+    parents.resize(k);
+    rankData.resize(k, 0);
+
+    for(int i = 0; i < k; ++i){
+        parents[i] = i;
+    }
+
+    for(const auto& op : operations) {
+        if(op[0] == 'u') {
+            int x = charToInt(op[1]);
+            int y = charToInt(op[2]);
+            results.push_back(Find1(x) == Find1(y));
+        }
+    }
+
+    return results;
+}
+
+vector<bool> solution2() {
+    vector<bool> results;
+
+    for(int i = 0; i < k; ++i){
+        parents[i] = i;
+    }
+
+    for(const auto& op : operations) {
+        if (op[0] == 'u') {
+            int x = charToInt(op[1]);
+            int y = charToInt(op[2]);
+            unionSet2(x, y);
+        } else if (op[0] == 'f') {
+            int x = charToInt(op[1]);
+            int y = charToInt(op[2]);
+            results.push_back(Find2(x) == Find2(y));
+        }
+    }
+
+    return results;
+}
+
 int main()
 {
     Input();
     Solve();
+    bool_Print(solution1());
+    bool_Print(solution2());
     Output();
     return 0;
 }
