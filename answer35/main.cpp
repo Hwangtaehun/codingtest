@@ -9,6 +9,7 @@
 using namespace std;
 
 int n, answer;
+vector<int> parent;
 vector<vector <int> > costs;
 
 void Input(){
@@ -51,8 +52,6 @@ bool Compare(const vector<int> n1, const vector<int> n2){
     return n1[2] < n2[2];
 }
 
-vector<int> parent;
-
 int findParent(int x){
     if(parent[x] == x){
         return x;
@@ -89,10 +88,69 @@ void Solve(){
     }
 }
 
+//solve
+class DisjointSet{
+private:
+    vector<int> m_parent, m_rank;
+
+public:
+    DisjointSet(int m_size){
+        m_parent.assign(m_size, -1);
+        m_rank.assign(m_size, 0);
+    }
+
+    int Find(int node){
+        if(m_parent[node] == -1){
+            return node;
+        }
+
+        return m_parent[node] = Find(m_parent[node]);
+    }
+
+    void Merge(int node1, int node2){
+        int root1 = Find(node1);
+        int root2 = Find(node2);
+
+        if(root1 != root2){
+            if(m_rank[root1] > m_rank[root2]){
+                m_parent[root2] = root1;
+            }else if(m_rank[root1] < m_rank[root2]){
+                m_parent[root1] = root2;
+            }else{
+                m_parent[root2] = root1;
+                m_rank[root1]++;
+            }
+        }
+    }
+
+    bool isCycle(int node1, int node2){
+        return Find(node1) == Find(node2);
+    }
+};
+
+int Solution(){
+    int totalCost = 0;
+    DisjointSet disjointSet(n);
+
+    for(const auto &edge : costs){
+        int cost = edge[2];
+        int node1 = edge[0];
+        int node2 = edge[1];
+
+        if(!disjointSet.isCycle(node1, node2)) {
+            disjointSet.Merge(node1, node2);
+            totalCost += cost;
+        }
+    }
+
+    return totalCost;
+}
+
 int main()
 {
     Input();
     Solve();
+    printf("%d\n", Solution());
     Output();
     return 0;
 }
