@@ -88,13 +88,12 @@ void Solve(){
     sort(costs.begin(), costs.end(), Compare);
 
     Find_route(visited, used, costs, 0, 0, n);
-
-    printf("%d\n", answer);
 }
 
 int main()
 {
     Input();
     Solve();
+    Output();
     return 0;
 }
