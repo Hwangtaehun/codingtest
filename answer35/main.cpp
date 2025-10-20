@@ -2,13 +2,13 @@
 #include <cstdio>
 #include <sstream>
 #include <limits>
-#include <string>
 #include <algorithm>
+#include <string>
 #include <vector>
 
 using namespace std;
 
-int n, answer = 0xFFFFFFF;
+int n, answer;
 vector<vector <int> > costs;
 
 void Input(){
@@ -51,43 +51,42 @@ bool Compare(const vector<int> n1, const vector<int> n2){
     return n1[2] < n2[2];
 }
 
-bool Check(const vector<bool> vb){
-    for(int i = 0; i < vb.size(); i++){
-        if(!vb[i]){
-            return false;
-        }
+vector<int> parent;
+
+int findParent(int x){
+    if(parent[x] == x){
+        return x;
     }
-    return true;
+    return parent[x] = findParent(parent[x]);
 }
 
-void Find_route(vector<bool> visisted, vector<bool> used, vector<vector <int> > costs, int cnt, int cost, int n){
-    if(cnt == n - 1){
-        if(Check(visisted) && cost < answer){
-            answer = cost;
-        }
-        return;
-    }
+void unionParent(int a, int b){
+    a = findParent(a);
+    b = findParent(b);
 
-    for(int i = 0; i < costs.size(); i++){
-        if(!used[i]){
-            used[i] = true;
-            visisted[costs[i][0]] = true;
-            visisted[costs[i][1]] = true;
-            Find_route(visisted, used, costs, cnt + 1, cost + costs[i][2], n);
-            visisted[costs[i][0]] = false;
-            visisted[costs[i][1]] = false;
-            used[i] = false;
-        }
+    if(a < b){
+        parent[b] = a;
+    }else{
+        parent[a] = b;
     }
 }
 
 void Solve(){
-    int cnt = 0;
-    vector<bool> used(costs.size(), false);
-    vector<bool> visited(n, false);
     sort(costs.begin(), costs.end(), Compare);
+    parent.resize(n);
 
-    Find_route(visited, used, costs, 0, 0, n);
+    for(int i = 0; i < n; i++) {
+        parent[i] = i;
+    }
+
+    for(int i = 0; i < costs.size(); i++){
+        int a = costs[i][0], b = costs[i][1], cost = costs[i][2];
+
+        if(findParent(a) != findParent(b)) {
+            unionParent(a, b);
+            answer += cost;
+        }
+    }
 }
 
 int main()
