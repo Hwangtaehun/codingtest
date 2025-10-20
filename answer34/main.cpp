@@ -41,11 +41,7 @@ void Output(){
 }
 
 void Solve(){
-    set<int> kinds;
-
-    for(int i = 0; i < nums.size(); i++){
-        kinds.insert(nums[i]);
-    }
+    set<int> kinds(nums.begin(), nums.end());
 
     answer = min(kinds.size(), nums.size() / 2);
 }
