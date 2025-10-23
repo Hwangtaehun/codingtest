@@ -66,7 +66,7 @@ void answer_print(){
     printf("\n");
 }
 
-bool Check(const unordered_set<char> us, char c){
+bool Check(const unordered_set<char> &us, char c){
     if(us.find(c) != us.end()){
         return false;
     }
