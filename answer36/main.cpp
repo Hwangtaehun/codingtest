@@ -17,7 +17,7 @@ void Input(){
     string line;
     vector<char> temp;
 
-    freopen("input2.txt", "r", stdin);
+    freopen("input.txt", "r", stdin);
     getline(cin, line);
     cin >> start;
     fclose(stdin);
@@ -98,8 +98,6 @@ void Solve(){
                 m_st.push(temp[i]);
             }
         }
-
-        answer_print();
     }
 }
 
@@ -107,5 +105,6 @@ int main()
 {
     Input();
     Solve();
+    Output();
     return 0;
 }
