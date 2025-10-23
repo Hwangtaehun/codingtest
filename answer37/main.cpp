@@ -17,7 +17,7 @@ void Input(){
     string s;
     vector<int> temp;
 
-    freopen("input.txt", "r", stdin);
+    freopen("input2.txt", "r", stdin);
     getline(cin, s);
     cin >> start;
     fclose(stdin);
@@ -70,16 +70,11 @@ void Solve(){
         answer.push_back(m_num);
 
         for(auto a: graph){
-            if(a.first == m_num && m_visited.find(a.second) != m_visited.end()){
+            if(a.first == m_num && m_visited.find(a.second) == m_visited.end()){
                 m_q.push(a.second);
                 m_visited.insert(a.second);
             }
         }
-
-        for(auto a : answer){
-            cout << a << " ";
-        }
-        cout << endl;
     }
 }
 
@@ -87,5 +82,6 @@ int main()
 {
     Input();
     Solve();
+    Output();
     return 0;
 }
