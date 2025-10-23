@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <queue>
+#include <unordered_set>
 
 using namespace std;
 
@@ -31,26 +33,59 @@ void Input(){
         s.erase(0, s.find_first_not_of(" \t\n\r"));
         s.erase(s.find_last_not_of(" \t\n\t") + 1);
 
-        while(!s.empty()){
+        if(!s.empty()){
             temp.push_back(stoi(s));
 
             if(temp.size() == 2){
-                pair<int, int> pt;
-                pt.first = temp[0];
-                pt.second = temp[1];
-                graph.push_back(pt);
+                graph.push_back({temp[0], temp[1]});
                 temp.clear();
             }
         }
     }
+}
 
-    for(auto a : graph){
-        cout << a.first << " - " << a.second << endl;
+void Output(){
+    freopen("output.txt", "w", stdout);
+
+    for(int i = 0; i < answer.size(); i++){
+        if(i != 0){
+            cout << ", ";
+        }
+        cout << answer[i];
+    }
+
+    fclose(stdout);
+}
+
+void Solve(){
+    unordered_set<int> m_visited;
+    queue<int> m_q;
+
+    m_q.push(start);
+    m_visited.insert(start);
+
+    while(!m_q.empty()){
+        int m_num = m_q.front();
+        m_q.pop();
+        answer.push_back(m_num);
+
+        for(auto a: graph){
+            if(a.first == m_num && m_visited.find(a.second) != m_visited.end()){
+                m_q.push(a.second);
+                m_visited.insert(a.second);
+            }
+        }
+
+        for(auto a : answer){
+            cout << a << " ";
+        }
+        cout << endl;
     }
 }
 
 int main()
 {
     Input();
+    Solve();
     return 0;
 }
