@@ -77,47 +77,70 @@ void vector_Print(T v){
     cout << endl;
 }
 
-void Solve(){
-    int s = source;
-    vector<bool> visited(num_vertices);
+bool circle_Check(){
+    for(int i = 0; i < num_vertices; i++){
+        for(int j = 0; j < edges.size(); j++){
+            if(get<0>(edges[j]) == i){
+                int goal = get<1>(edges[j]);
+                int value = get<2>(edges[j]) + answer[i];
 
-    answer.assign(num_vertices, 0xFFFFFFF);
-    answer[s] = 0;
-    visited[s] = true;
-
-    while(Check(visited)){
-        vector<int> transfer;
-
-        for(int i = 0; i < edges.size(); i++){
-            if(get<0>(edges[i]) == s){
-                int goal = get<1>(edges[i]);
-                int value = get<2>(edges[i]);
-                answer[goal] = value;
-                transfer.push_back(goal);
-            }
-        }
-
-        for(int h = 0; h < transfer.size(); h++){
-            for(int i = 0; i < edges.size(); i++){
-                if(transfer[h] == get<0>(edges[i])){
-                    int goal = get<1>(edges[i]);
-                    int value = get<2>(edges[i]) + answer[transfer[h]];
-                    if(value < answer[goal]){
-                        answer[goal] = value;
-                    }
-                    cout << "start = " << transfer[h] << ", goal = " << goal << endl;
+                if(value < answer[goal]){
+                    return true;
                 }
             }
         }
     }
 
-    vector_Print(answer);
+    return false;
+}
+
+void Solve(){
+    int s = source;
+    int cnt = num_vertices - 1;
+    vector<bool> visited(num_vertices);
+
+    answer.assign(num_vertices, 0xFFFFFFF);
+    answer[s] = 0;
+
+    while(Check(visited)){
+        int m_min = 0xFFFFFFF;
+        visited[s] = true;
+
+        for(int i = 0; i < edges.size(); i++){
+            if(get<0>(edges[i]) == s){
+                int goal = get<1>(edges[i]);
+                int value = get<2>(edges[i]) + answer[s];
+
+                if(value < answer[goal]){
+                    answer[goal] = value;
+                }
+            }
+        }
+
+        for(int i = 0; i < visited.size(); i++){
+            if(!visited[i] && answer[i] < m_min){
+                s = i;
+                m_min = answer[i];
+            }
+        }
+
+        //vector_Print(answer);
+        //vector_Print(visited);
+    }
+
+    while(cnt != 0){
+        if(circle_Check()){
+            answer.assign(1, -1);
+            break;
+        }
+        cnt--;
+    }
 }
 
 int main()
 {
     Input();
     Solve();
-    //Output();
+    Output();
     return 0;
 }
