@@ -18,7 +18,8 @@ void Input(){
 
     freopen("input.txt", "r", stdin);
 
-    scanf("%d\n%d\n", &start, &numNodes);
+    cin >> start >> numNodes;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     getline(cin, s);
 
     fclose(stdin);
