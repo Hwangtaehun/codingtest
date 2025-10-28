@@ -1,4 +1,3 @@
-#include <limits>
 #include <iostream>
 #include <cstdio>
 #include <sstream>
@@ -8,6 +7,8 @@
 #include <tuple>
 
 using namespace std;
+
+#define INF 0xFFFFFFF
 
 vector<tuple<int, int, int>> edges;
 int num_vertices, source;
@@ -19,8 +20,7 @@ void Input(){
 
     freopen("input.txt", "r", stdin);
 
-    cin >> source >> num_vertices;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    scanf("%d\n%d\n", &source, &num_vertices);
     getline(cin, s);
 
     fclose(stdin);
@@ -59,16 +59,6 @@ void Output(){
     fclose(stdout);
 }
 
-bool Check(vector<bool> v){
-    for(int i = 0; i < v.size(); i++){
-        if(!v[i]){
-            return true;
-        }
-    }
-
-    return false;
-}
-
 template <typename T>
 void vector_Print(T v){
     for(auto a: v){
@@ -77,63 +67,32 @@ void vector_Print(T v){
     cout << endl;
 }
 
-bool circle_Check(){
-    for(int i = 0; i < num_vertices; i++){
-        for(int j = 0; j < edges.size(); j++){
-            if(get<0>(edges[j]) == i){
-                int goal = get<1>(edges[j]);
-                int value = get<2>(edges[j]) + answer[i];
-
-                if(value < answer[goal]){
-                    return true;
-                }
-            }
-        }
-    }
-
-    return false;
-}
-
 void Solve(){
-    int s = source;
-    int cnt = num_vertices - 1;
-    vector<bool> visited(num_vertices);
+    answer.assign(num_vertices, INF);
+    answer[source]  = 0;
 
-    answer.assign(num_vertices, 0xFFFFFFF);
-    answer[s] = 0;
+    for(int i = 0; i < num_vertices - 1; i++){
+        bool updated = false;
 
-    while(Check(visited)){
-        int m_min = 0xFFFFFFF;
-        visited[s] = true;
-
-        for(int i = 0; i < edges.size(); i++){
-            if(get<0>(edges[i]) == s){
-                int goal = get<1>(edges[i]);
-                int value = get<2>(edges[i]) + answer[s];
-
-                if(value < answer[goal]){
-                    answer[goal] = value;
-                }
+        for(int j = 0; j < edges.size(); j++){
+            int s = get<0>(edges[j]), g = get<1>(edges[j]), w = get<2>(edges[j]);
+            if(answer[s] != INF && answer[s] + w < answer[g]){
+                answer[g] = answer[s] + w;
+                updated = true;
             }
         }
 
-        for(int i = 0; i < visited.size(); i++){
-            if(!visited[i] && answer[i] < m_min){
-                s = i;
-                m_min = answer[i];
-            }
+        if(!updated){
+            break;
         }
-
-        //vector_Print(answer);
-        //vector_Print(visited);
     }
 
-    while(cnt != 0){
-        if(circle_Check()){
+    for(int i = 0; i < edges.size(); i++){
+        int s = get<0>(edges[i]), g = get<1>(edges[i]), w = get<2>(edges[i]);
+        if(answer[s] + w < answer[g]){
             answer.assign(1, -1);
             break;
         }
-        cnt--;
     }
 }
 
