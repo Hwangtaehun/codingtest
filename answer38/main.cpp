@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <tuple>
+#include <limits>
 
 using namespace std;
 
@@ -112,10 +113,101 @@ void Solve(){
     }
 }
 
+//solution
+#include <queue>
+
+const int INF = numeric_limits<int>::max();
+const int MAX_NODES = 100;
+int graph[MAX_NODES][MAX_NODES];
+bool visited[MAX_NODES];
+
+vector<int> solution1(){
+    vector<int> distances(numNodes, INF);
+
+    for(int i = 0; i < MAX_NODES; i++){
+        fill_n(graph[i], MAX_NODES, INF);
+        visited[i] = false;
+    }
+
+    for(const auto &[from, to, weight] : edges){
+        graph[from][to] = weight;
+    }
+
+    distances[start] = 0;
+
+    for(int i = 0; i < numNodes - 1; i++){
+        int minDistance = INF;
+        int closestNode = -1;
+
+        for(int j = 0; j < numNodes; j++){
+            if(!visited[j] && distances[j] < minDistance) {
+                minDistance = distances[j];
+                closestNode = j;
+            }
+        }
+
+        visited[closestNode] = true;
+
+        for(int j = 0; j < numNodes; j++){
+            int newDistance = distances[closestNode] + graph[closestNode][j];
+            if(!visited[j] && graph[closestNode][j] != INF && newDistance < distances[j]) {
+                distances[j] = newDistance;
+            }
+        }
+    }
+
+    return distances;
+}
+
+struct Compare {
+    bool operator()(const pair<int, int>& a, const pair<int, int>& b) {
+        return a.first > b.first;
+    }
+};
+
+vector<int> solution2(){
+    priority_queue< pair<int, int> , vector< pair<int, int> >, Compare> pq;
+    vector< vector <pair<int, int> > > adjList(numNodes);
+    vector<int> distances(numNodes, INF);
+    vector<bool> visited(numNodes, false);
+
+    for(const auto& [from, to, weight] : edges) {
+        adjList[from].emplace_back(to, weight);
+    }
+
+    distances[start] = 0;
+    pq.push({0, start});
+
+    while(!pq.empty()){
+        int currentDistance = pq.top().first;
+        int currentNode = pq.top().second;
+        pq.pop();
+
+        if(visited[currentNode]){
+            continue;
+        }
+
+        visited[currentNode] = true;
+
+        for(const auto& [neighbor, weight] : adjList[currentNode]){
+            int newDistance = distances[currentNode] + weight;
+
+            if(newDistance < distances[neighbor]) {
+                distances[neighbor] = newDistance;
+                pq.push({newDistance, neighbor});
+            }
+        }
+    }
+
+    return distances;
+}
+
 int main()
 {
     Input();
     Solve();
+    vector_Print(solution1());
+    vector_Print(solution2());
     Output();
     return 0;
 }

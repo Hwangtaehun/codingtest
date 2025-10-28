@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <sstream>
 #include <algorithm>
+#include <limits>
 #include <string>
 #include <vector>
 #include <tuple>
@@ -20,7 +21,8 @@ void Input(){
 
     freopen("input.txt", "r", stdin);
 
-    scanf("%d\n%d\n", &source, &num_vertices);
+    cin >> source >> num_vertices;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     getline(cin, s);
 
     fclose(stdin);
@@ -96,10 +98,44 @@ void Solve(){
     }
 }
 
+vector<int> solution(){
+    vector< vector <pair<int, int> > > graph(num_vertices);
+    vector<int> distance(num_vertices, INF);
+
+    for(auto &edge : edges) {
+        int from, to, weight;
+        tie(from, to, weight) = edge;
+        graph[from].emplace_back(to, weight);
+    }
+
+    distance[source] = 0;
+
+    for(int i = 0; i < num_vertices - 1; i++){
+        for(int u = 0; u < num_vertices; u++){
+            for(const auto &[v, weight] : graph[u]){
+                if(distance[u] + weight < distance[v]){
+                    distance[v] = distance[u] + weight;
+                }
+            }
+        }
+    }
+
+    for(int u = 0; u < num_vertices; u++){
+        for(const auto &[v, weight] : graph[u]){
+            if(distance[u] + weight < distance[v]){
+                return vector<int>(1, -1);
+            }
+        }
+    }
+
+    return distance;
+}
+
 int main()
 {
     Input();
     Solve();
+    vector_Print(solution());
     Output();
     return 0;
 }
