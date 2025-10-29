@@ -98,7 +98,7 @@ int bfs(char start, char end, vector<string> &maps){
     return -1;
 }
 
-int solution(vector<string> maps){
+int solution(vector<string> &maps){
     n = maps.size();
     m = maps[0].size();
 
