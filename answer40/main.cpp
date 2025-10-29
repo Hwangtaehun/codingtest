@@ -4,19 +4,21 @@
 #include <cstdio>
 #include <vector>
 #include <string>
+#include <queue>
 
 using namespace std;
 
-struct ROWCOL{
-    int x;
-    int y;
-};
-
 vector<string> maps;
 vector< vector<bool> > visited;
-ROWCOL dir[4]= {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
-char token[2] = {'L', 'E'};
-int answer = 0xFFFFFFF, ti = 0;
+int answer;
+
+struct Point {
+    int y, x, cnt;
+};
+
+int dy[4] = {-1, 0, 1, 0};
+int dx[4] = {0, 1, 0, -1};
+int n, m;
 
 void Input(){
     string s;
@@ -54,75 +56,65 @@ void vector_Print(T v){
     }
 }
 
-bool Check(int x, int y){
-    int w = maps[0].length(), h = maps.size();
-    //printf("w = %d, h = %d\n", w, h);
-    return (0 <= x && x < w) && (0 <= y && y < h);
+bool isWithinRange(int y, int x){
+    return 0 <= y && y < n && 0 <= x && x < m;
 }
 
-int Solve(int x, int y, int cnt){
-    visited[x][y] = true;
-
-    for(int i = 0; i < 4; i++){
-        int res;
-        int m_x = x + dir[i].x, m_y = y + dir[i].y;
-
-        if(Check(m_x, m_y)){
-            if(maps[m_x][m_y] == 'O' && !visited[m_x][m_y]){
-                res = Solve(m_x, m_y, cnt + 1);
-                if(res != -1){
-                    return res;
-                }
-            } else if(maps[m_x][m_y] == token[ti] && !visited[m_x][m_y]){
-                if(ti == 0){
-                    ti++;
-                    res = Solve(m_x, m_y, cnt + 1);
-                    if(res != -1){
-                        return res;
-                    }
-                }else{
-                    return cnt + 1;
-                }
+Point findStartPoint(char start, vector<string> &maps){
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < m; j++){
+            if(maps[i][j] == start){
+                return{i, j, 0};
             }
         }
     }
+    return {-1, -1, -1};
+}
 
-    visited[x][y] = false;
+int bfs(char start, char end, vector<string> &maps){
+    bool visited[101][101] = {false};
+    queue<Point> q;
 
+    q.push(findStartPoint(start, maps));
+
+    while(!q.empty()){
+        Point current = q.front();
+        q.pop();
+
+        if(maps[current.y][current.x] == end){
+            return current.cnt;
+        }
+
+        for(int i = 0; i < 4; i++){
+            int ny = current.y + dy[i];
+            int nx = current.x + dx[i];
+
+            if(isWithinRange(ny, nx) && !visited[ny][nx] && maps[ny][nx] != 'X'){
+                q.push({ny, nx, current.cnt + 1});
+                visited[ny][nx] = true;
+            }
+        }
+    }
     return -1;
+}
+
+int solution(vector<string> maps){
+    n = maps.size();
+    m = maps[0].size();
+
+    int distanceToL = bfs('S', 'L', maps);
+    if(distanceToL == -1){
+        return -1;
+    }
+
+    int distanceToE = bfs('L', 'E', maps);
+    return distanceToE == -1 ? -1 : distanceToL + distanceToE;
 }
 
 int main()
 {
-    int m_result;
-    ROWCOL m_start;
-
     Input();
-
-    visited.resize(maps.size());
-    for(int i = 0; i < maps.size(); i++){
-        visited[i].assign(maps[i].length(), false);
-    }
-
-    for(int i = 0; i < maps.size(); i++){
-        for(int j = 0; j < maps[i].length(); j++){
-            if(maps[i][j] == 'X'){
-                visited[i][j] = true;
-            }
-            else if(maps[i][j] == 'S'){
-                m_start.x = i;
-                m_start.y = j;
-            }
-        }
-    }
-
-    m_result = Solve(m_start.x, m_start.y, 0);
-
-    if(m_result < answer){
-        answer = m_result;
-    }
-
-    printf("%d\n", answer);
-
+    answer = solution(maps);
+    Output();
     return 0;
 }
